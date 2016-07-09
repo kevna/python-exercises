@@ -1,0 +1,13 @@
+import sorter
+
+class InsertionSort(sorter.Sorter):
+    def sort(self, items, cutoff = None):
+        temp = None
+        for i in range(1, len(items)):
+            temp = items[i]
+            print i, temp
+            j = i - 1
+            while j > 0 and items[j+1] > temp:
+                items[j] = items[j + 1]
+                j -= 1
+            items[j] = temp
