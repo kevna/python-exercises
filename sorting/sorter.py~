@@ -1,3 +1,0 @@
-class Sorter(object):
-    def sort(items, cutoff = None):
-        pass
