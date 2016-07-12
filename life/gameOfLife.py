@@ -1,55 +1,54 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-import sys
-import random
+import sys, random, time
 
 class GameOfLife(object):
     def __init__(self, grid = []):
         self.grid = grid
     
-    def cellLives(self, x, y):
+    def cellLives(self, row, col):
         liveNeigbours = 0
         height = len(self.grid)
         for i in range(-1, 2):
-            posX = x + i
-            if posX >= 0 and posX < height:
-                width = len(self.grid[posX])
+            rowPos = row + i
+            if rowPos >= 0 and rowPos < height:
+                width = len(self.grid[rowPos])
                 for j in range(-1, 2):
-                    posY = y + j
-                    if posY >= 0 and posY < width and self.grid[posX][posY]:
+                    colPos = col + j
+                    if colPos >= 0 and colPos < width and self.grid[rowPos][colPos]:
                             liveNeigbours += 1
         liveCell = False
-        if liveNeigbours == 3 or self.grid[x][y] and liveNeigbours == 4:
+        if liveNeigbours == 3 or self.grid[row][col] and liveNeigbours == 4:
             liveCell = True
         return liveCell
 
     def step(self):
         newGrid = []
-        for x in range(len(self.grid)):
+        for row in range(len(self.grid)):
             newRow = []
-            for y in range(len(self.grid[x])):
-                newRow.append(self.cellLives(x, y))
+            for col in range(len(self.grid[row])):
+                newRow.append(self.cellLives(row, col))
             newGrid.append(newRow)
         self.grid = newGrid
     
     def __str__(self):
         allRows = []
-        for x in range(len(self.grid)):
-            row = []
-            for y in range(len(self.grid[x])):
-                if self.grid[x][y]:
-                    row.append("\xe2\x96\x88")
+        for row in range(len(self.grid)):
+            thisRow = []
+            for col in range(len(self.grid[row])):
+                if self.grid[row][col]:
+                    thisRow.append("\xe2\x96\x88")
                 else:
-                    row.append(" ")
-            allRows.append("".join(row))
+                    thisRow.append(" ")
+            allRows.append("".join(thisRow))
         return "\n".join(allRows)
 
     @staticmethod
-    def randomGrid(maxX, maxY):
+    def randomGrid(rowMax, colMax):
         newGrid = []
-        for x in range(maxX):
+        for row in range(rowMax):
             newRow = []
-            for y in range(maxY):
+            for col in range(colMax):
                 if random.randint(0,3) == 1:
                     newRow.append(True)
                 else:
@@ -59,16 +58,17 @@ class GameOfLife(object):
 
     @staticmethod
     def main():
-        maxX = 10
-        maxY = 10
+        rowMax = 10
+        colMax = 10
         if len(sys.argv) == 3:
-            maxX = int(sys.argv[1])
-            maxY = int(sys.argv[2])
-        gameGrid = GameOfLife(GameOfLife.randomGrid(maxX, maxY))
+            rowMax = int(sys.argv[1])
+            colMax = int(sys.argv[2])
+        gameGrid = GameOfLife(GameOfLife.randomGrid(rowMax, colMax))
         try:
             while True:
                 gameGrid.step()
                 print gameGrid
+                time.sleep(0.1)
         except KeyboardInterrupt:
             sys.exit(0)
 
