@@ -1,11 +1,43 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-import sys, random, time
+import sys, random, os, time
 
 class GameOfLife(object):
+    GENERATIONSTOKEEP = 10
+    
     def __init__(self, grid = []):
         self.grid = grid
-    
+        self.gridSize = 0
+        for row in grid:
+            self.gridSize += len(row)
+        self.storedGenerations = []
+
+    def compareGrids(self, gridA, gridB):
+        matchCount = 0
+        for row in range(len(gridA)):
+            for col in range(len(gridA[row])):
+                try:
+                    if gridA[row][col] == gridB[row][col]:
+                        matchCount += 1
+                except IndexError:
+                    pass
+        return matchCount
+
+    def hasActivity(self):
+        generationCount = len(self.storedGenerations)
+        if not generationCount:
+            return True
+        generationalMatch = 0
+        for gridGeneration in self.storedGenerations:
+            generationalMatch += self.compareGrids(gridGeneration, self.grid)
+        generationalMatch /= generationCount
+        return generationalMatch < self.gridSize * 0.99
+
+    def storeGeneration(self):
+        self.storedGenerations.append(self.grid)
+        if len(self.storedGenerations) > self.GENERATIONSTOKEEP:
+            del self.storedGenerations[0]
+
     def cellLives(self, row, col):
         liveNeigbours = 0
         height = len(self.grid)
@@ -23,13 +55,14 @@ class GameOfLife(object):
         return liveCell
 
     def step(self):
+        self.storeGeneration()
         newGrid = []
         for row in range(len(self.grid)):
             newRow = []
             for col in range(len(self.grid[row])):
                 newRow.append(self.cellLives(row, col))
-            newGrid.append(newRow)
-        self.grid = newGrid
+            newGrid.append(tuple(newRow))
+        self.grid = tuple(newGrid)
     
     def __str__(self):
         allRows = []
@@ -37,7 +70,7 @@ class GameOfLife(object):
             thisRow = []
             for col in range(len(self.grid[row])):
                 if self.grid[row][col]:
-                    thisRow.append("\xe2\x96\x88")
+                    thisRow.append("0") #"\xe2\x96\x88")
                 else:
                     thisRow.append(" ")
             allRows.append("".join(thisRow))
@@ -53,22 +86,26 @@ class GameOfLife(object):
                     newRow.append(True)
                 else:
                     newRow.append(False)
-            newGrid.append(newRow)
-        return newGrid
+            newGrid.append(tuple(newRow))
+        return tuple(newGrid)
+
+    def theLoop(self):
+        while self.hasActivity():
+            self.step()
+            os.system("clear")
+            print self
+            time.sleep(0.1)
 
     @staticmethod
     def main():
         rowMax = 20
-        colMax = 30
+        colMax = 40
         if len(sys.argv) == 3:
             rowMax = int(sys.argv[1])
             colMax = int(sys.argv[2])
         gameGrid = GameOfLife(GameOfLife.randomGrid(rowMax, colMax))
         try:
-            while True:
-                gameGrid.step()
-                print gameGrid
-                time.sleep(0.1)
+            gameGrid.theLoop()
         except KeyboardInterrupt:
             sys.exit(0)
 
