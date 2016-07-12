@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import unittest
-import ackermann
+import ackermannCache
 
 class Test_Ackerman(unittest.TestCase):
     def test_getAckermann(self):
@@ -18,9 +18,9 @@ class Test_Ackerman(unittest.TestCase):
             (3, 0, 5),
             (3, 5, 253),
             (4, 0, 13),
-            #(4, 1, 65533),
+            (4, 1, 65533),
                 )
-        testCache = ackermann.AckermannCache()
+        testCache = ackermannCache.AckermannCache()
         for testArgM, testArgN, expectedResult in testList:
             actualResult = testCache.getAckermann(testArgM, testArgN)
             self.assertEqual(expectedResult, actualResult)
