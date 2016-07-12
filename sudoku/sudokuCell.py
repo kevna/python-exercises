@@ -49,14 +49,12 @@ class SudokuCell(object):
             return False
         result = False
         if self.value == other.value:
-            if self.isFound():
-                result = True
-            else:
-                result = True
+            result = True
+            if not self.isFound():
                 for i in self.possibilities:
                     if i not in other.possibilities:
-                        result = False
+                        return False
                 for j in other.possibilities:
                     if i not in self.possibilities:
-                        result = False
+                        return False
         return result
