@@ -58,8 +58,8 @@ class GameOfLife(object):
 
     @staticmethod
     def main():
-        rowMax = 10
-        colMax = 10
+        rowMax = 20
+        colMax = 30
         if len(sys.argv) == 3:
             rowMax = int(sys.argv[1])
             colMax = int(sys.argv[2])
