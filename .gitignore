@@ -1,0 +1,4 @@
+# byte-code
+*.py[cod]
+# emacs tmp files
+*~
