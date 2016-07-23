@@ -1,47 +1,63 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
+import ColourText
 
 class SudokuCell(object):
     ALLPOSSIBILITIES = (1, 2, 3, 4, 5, 6, 7, 8, 9)
+    ORIGINALCOLOUR = ColourText.BLUE
     
     def __init__(self, value = None):
         if value in self.ALLPOSSIBILITIES:
-            self.value = value
-            self.possibilityCount = 0
-            self.possibilities = None
+            self.setValue(value)
+            self.original = True
         else:
             self.value = None
-            self.possibilityCount = 9
             self.possibilities = list(self.ALLPOSSIBILITIES)
+            self.original = False
+
+    def setValue(self, value):
+        self.value = value
+        self.possibilities = None
 
     def isPossible(self, possibility):
-        result = possibility in self.possibilities
-        if self.isFound() and possibility == self.value:
+        result = False
+        if not self.isFound():
+            result = possibility in self.possibilities
+        elif possibility == self.value:
             result = True
         return result
 
-    def removePossbility(self, possibility):
-        if possibility == self.value or not self.isPossible(possibility):
+    def removePossibility(self, possibility):
+        if self.isFound() or not self.isPossible(possibility):
             return False
         self.possibilities.remove(possibility)
-        self.possibilityCount -= 1
-        if self.possibilityCount == 1:
-            value = self.possibilities[0]
-            self.possibilities = None
-            self.possibilityCount = 0
+        if len(self.possibilities) <= 1:
+            self.setValue(self.possibilities[0])
         return True
 
     def isFound(self):
         return self.value is not None
 
+    def __len__(self):
+        if self.isFound():
+            result = 1
+        else:
+            result = len(self.possibilities)
+        return result
+
+    def __repr__(self):
+        if self.isFound():
+            result = self.value
+        else:
+            result = self.possibilities
+        return str(result)
+
     def __str__(self):
+        result = " "
         if self.isFound():
             result = str(self.value)
-        else:
-            possList = []
-            for i in self.possibilities:
-                possList.append(str(i))
-            result = "(" + ", ".join(possList) + ")"
+            if self.original:
+                result = ColourText.colour(result, self.ORIGINALCOLOUR)
         return result
 
     def __eq__(self, other):
