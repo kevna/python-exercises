@@ -1,12 +1,13 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-import sys, random, os, time
+import sys, random, os, time, curses, argparse
 
 class GameOfLife(object):
     GENERATIONSTOKEEP = 10
     
-    def __init__(self, grid = []):
+    def __init__(self, grid = [], sleep = 0.1):
         self.grid = grid
+        self.sleep = sleep
         self.gridSize = 0
         for row in grid:
             self.gridSize += len(row)
@@ -76,6 +77,24 @@ class GameOfLife(object):
             allRows.append("".join(thisRow))
         return "\n".join(allRows)
 
+    def drawGrid(self):
+        os.system("clear")
+        print self
+
+    def drawCursesGrid(self):
+        #self.window.clear()
+        for row in range(len(self.grid)):
+            for col in range(len(self.grid[row])):
+                cellChar = " "
+                if self.grid[row][col]:
+                    cellChar = "0" #"\xe2\x96\x88"
+                self.window.addch(row, col, cellChar)
+        self.window.refresh()
+
+    def drawCursesMessage(self, message):
+        self.window.addstr(len(self.grid) + 1, 0, message)
+        self.window.refresh()
+
     @staticmethod
     def randomGrid(rowMax, colMax):
         newGrid = []
@@ -90,20 +109,30 @@ class GameOfLife(object):
         return tuple(newGrid)
 
     def theLoop(self):
-        while self.hasActivity():
-            self.step()
-            os.system("clear")
-            print self
-            time.sleep(0.1)
+        self.window = curses.initscr()
+        curses.noecho()
+        try:
+            while self.hasActivity():
+                self.step()
+                self.drawCursesGrid()
+                time.sleep(self.sleep)
+            self.drawCursesMessage("Game Over, press any key to exit")
+            self.window.getch()
+        finally:
+            curses.endwin()
+
+    @staticmethod
+    def fetchArgs():
+        parser = argparse.ArgumentParser(description = "Play the Game of Life")
+        parser.add_argument("-r", "--rows", type = int, default = 20, help = "Height of the game grid")
+        parser.add_argument("-c", "--cols", type = int, default = 40, help = "Width of the game grid")
+        parser.add_argument("-s", "--sleep", type = float, default = 0.1, help = "Time between game steps")
+        return parser.parse_args()
 
     @staticmethod
     def main():
-        rowMax = 20
-        colMax = 40
-        if len(sys.argv) == 3:
-            rowMax = int(sys.argv[1])
-            colMax = int(sys.argv[2])
-        gameGrid = GameOfLife(GameOfLife.randomGrid(rowMax, colMax))
+        args = GameOfLife.fetchArgs()
+        gameGrid = GameOfLife(grid = GameOfLife.randomGrid(args.rows, args.cols), sleep = args.sleep)
         try:
             gameGrid.theLoop()
         except KeyboardInterrupt:
