@@ -4,7 +4,7 @@ A collection of programming exercises written in python for practice and to pass
 
 ackermann
 ---------
-Ackermann's function is one of the earliest examples of a totally computable (μ-recursive) function that is not also a primitive recursive function. It is doubly-recursive and grows more quickly than even many multiple exponential functions. To read more about Ackermann's function [visit wolfram mathworld](http://mathworld.wolfram.com/AckermannFunction.html)
+Ackermann's function is one of the earliest examples of a totally computable (μ-recursive) function that is not also a primitive recursive function. It is doubly-recursive and grows more quickly than even many multiple exponential functions. To read more about Ackermann's function [visit wolfram mathworld](http://mathworld.wolfram.com/AckermannFunction.html).
 
 current features:
 - calculate ackermann's function up to the maximum under the recursion limit of the device used
@@ -46,3 +46,23 @@ future additions:
 - additional arguments:
   + timing between generational steps
   + command arguments for above additions
+
+sorting
+-------
+A collection of sorting algorithms.
+
+current features:
+- insertion sort
+- stupid sort (gnome sort)
+- optimised bubble sort
+  + stops when the list is sorted, rather than continuing to run over the list
+- cockatil shaker sort
+  + two optimised bubble sorts running over the list in opposite directions
+- quick sort
+  + picks the middle item of the list as a pivot
+  + creates sub-lists of lower and higher values than the pivot
+  + sorts the sublists and attaches them either side of the pivot
+- merge sort
+  + divides the list in half
+  + sorts the sublists
+  + merges them
