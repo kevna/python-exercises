@@ -17,21 +17,16 @@ class SudokuCell(object):
 
     def setValue(self, value):
         self.value = value
-        self.possibilities = None
+        self.possibilities = ()
 
     def isPossible(self, possibility):
-        result = False
-        if not self.isFound():
-            result = possibility in self.possibilities
-        elif possibility == self.value:
-            result = True
-        return result
+        return possibility in self.possibilities
 
     def removePossibility(self, possibility):
         if self.isFound() or not self.isPossible(possibility):
             return False
         self.possibilities.remove(possibility)
-        if len(self.possibilities) <= 1:
+        if len(self) <= 1:
             self.setValue(self.possibilities[0])
         return True
 
@@ -39,11 +34,7 @@ class SudokuCell(object):
         return self.value is not None
 
     def __len__(self):
-        if self.isFound():
-            result = 1
-        else:
-            result = len(self.possibilities)
-        return result
+        return len(self.possibilities)
 
     def __repr__(self):
         if self.isFound():
