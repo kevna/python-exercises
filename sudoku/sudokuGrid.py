@@ -49,6 +49,41 @@ class SudokuGrid(object):
         subgridC = (c / self.BOX_WIDTH) * self.BOX_WIDTH
         return subgridR, subgridC
 
+    def _rowRemovePossibility(self, r, n):
+        result = 0
+        for cell in self._grid[r]:
+            if cell.removePossibility(n):
+                result += 1
+        return result
+
+    def _colRemovePossibility(self, c, n):
+        result = 0
+        for row in self._grid:
+            if row[c].removePossibility(n):
+                result += 1
+        return result
+
+    def _boxRemovePossibility(self, r, c, n):
+        result = 0
+        R, C = self.getBoxCoords(r, c)
+        for row in range(R, R + self.BOX_HEIGHT):
+            for col in range(C, C + self.BOX_WIDTH):
+                if self._grid[row][col].removePossibility(n):
+                    result += 1
+        return result
+
+    def setValue(self, row, col, n):
+        result = 0
+        cell = self._grid[row][col]
+        if not cell.isFound():
+            print row, col, "setValue", n
+            cell.setValue(n)
+            result += 1
+        result += self._rowRemovePossibility(row, n)
+        result += self._colRemovePossibility(col, n)
+        result += self._boxRemovePossibility(row, col, n)
+        return result
+
     def checkRowComplete(self, r):
         if r in self._completeRows:
             return True
