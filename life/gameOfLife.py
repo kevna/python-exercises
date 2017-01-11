@@ -50,9 +50,10 @@ class GameOfLife(object):
                     colPos = col + j
                     if colPos >= 0 and colPos < width and self.grid[rowPos][colPos]:
                             liveNeigbours += 1
-        liveCell = False
-        if liveNeigbours == 3 or self.grid[row][col] and liveNeigbours == 4:
-            liveCell = True
+
+        liveCell = (liveNeigbours-1) in {True: (2, 3), # survival case
+                                         False: (2,), # birth case
+                                         }[self.grid[row][col]]
         return liveCell
 
     def step(self):
