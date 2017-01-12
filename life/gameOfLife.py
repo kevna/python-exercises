@@ -1,18 +1,82 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-import sys, random, os, time, curses, argparse
+import Script
+import re
+import CursesMixin
+import sys, random, os, time, curses
 
-class GameOfLife(object):
+class GameOfLife(Script.Script, CursesMixin.CursesMixin):
     GENERATIONSTOKEEP = 10
+    RULESETS = {"life": ({2, 3}, {2,}),
+                "highlife": ({2, 3}, {3, 6}),
+                "seeds": ({}, {2,}),
+                "maze": ({1, 2, 3, 4, 5}, {3,}),
+                "flock": ({1, 2}, {3,}),
+                }
     
-    def __init__(self, grid = [], sleep = 0.1):
+    def __init__(self, grid = []):
+        self.rows = 20
+        self.cols = 40
+        self.rules = {True: (2, 3), # survival case
+                      False: (2,), # birth case
+                      }
+        self.setGrid(grid)
+        self.storedGenerations = []
+        self.cellColour = 0
+
+    def fetchArgParser(self):
+        parser = super(GameOfLife, self).fetchArgParser(description = "Play the game of life")
+        parser.add_argument("-s", "--size", type = str, default = "%sx%s"%(self.rows,self.cols), help = "dimensions of the game grid")
+        parser.add_argument("-r", "--rules", type = str, default = "life", help = "Rule set to use for this game")
+        parser.add_argument("--sleep", type = float, default = 0.1, help = "Time between game steps")
+        parser.add_argument("--die", action="store_true", help = "Die when game appears to be over")
+        parser.add_argument("--colour", action="store_true", help = "Colour the game grid")
+        return parser
+
+    def validateConfig(self):
+        super(GameOfLife, self).validateConfig()
+        match = re.match("(\d+)x(\d+)", self.config.size)
+        if match:
+            self.rows, self.cols = [int(d) for d in match.groups()]
+
+        rules = self.config.rules
+        survival = ()
+        birth = ()
+        if self.config.rules in self.RULESETS:
+            survival, birth = self.RULESETS[rules]
+        else:
+            match = re.match("(\d*)/(\d*)", rules)
+            if match:
+                survival, birth = match.groups()
+            else:
+                match = re.match("B(\d*)/S(\d*)", rules)
+                if match:
+                    birth, survival = match.groups()
+        if survival or birth:
+            self.rules = {True: {int(d) for d in survival},
+                          False: {int(d) for d in birth},
+                          }
+
+    def _main(self):
+        grid = self.randomGrid(self.rows, self.cols)
+        self.setGrid(grid)
+        self.cursesStart(colour = self.config.colour)
+        try:
+            self.theLoop()
+        finally:
+            self.cursesEnd()
+
+    def cursesStart(self, colour = False):
+        super(GameOfLife, self).cursesStart(colour = colour)
+        if colour:
+            self.cellColour = curses.color_pair(11)
+
+    def setGrid(self, grid):
         self.grid = grid
-        self.sleep = sleep
         self.gridSize = 0
         for row in grid:
             self.gridSize += len(row)
-        self.storedGenerations = []
-
+        
     def compareGrids(self, gridA, gridB):
         matchCount = 0
         for row in range(len(gridA)):
@@ -51,9 +115,7 @@ class GameOfLife(object):
                     if colPos >= 0 and colPos < width and self.grid[rowPos][colPos]:
                             liveNeigbours += 1
 
-        liveCell = (liveNeigbours-1) in {True: (2, 3), # survival case
-                                         False: (2,), # birth case
-                                         }[self.grid[row][col]]
+        liveCell = (liveNeigbours-1) in self.rules[self.grid[row][col]]
         return liveCell
 
     def step(self):
@@ -88,16 +150,14 @@ class GameOfLife(object):
             for col in range(len(self.grid[row])):
                 cellChar = " "
                 if self.grid[row][col]:
-                    cellChar = "0" #"\xe2\x96\x88"
-                self.window.addch(row, col, cellChar)
+                    cellChar = curses.ACS_DIAMOND
+                self.window.addch(row, col, cellChar, self.cellColour)
         self.window.refresh()
 
     def drawCursesMessage(self, message):
-        self.window.addstr(len(self.grid) + 1, 0, message)
-        self.window.refresh()
+        super(GameOfLife, self).drawCursesMessage(len(self.grid) + 1, 0, message)
 
-    @staticmethod
-    def randomGrid(rowMax, colMax):
+    def randomGrid(self, rowMax, colMax):
         newGrid = []
         for row in range(rowMax):
             newRow = []
@@ -110,35 +170,17 @@ class GameOfLife(object):
         return tuple(newGrid)
 
     def theLoop(self):
-        self.window = curses.initscr()
-        curses.noecho()
-        try:
-            while self.hasActivity():
-                self.step()
-                self.drawCursesGrid()
-                time.sleep(self.sleep)
-            self.drawCursesMessage("Game Over, press any key to exit")
-            self.window.getch()
-        finally:
-            curses.endwin()
-
-    @staticmethod
-    def fetchArgs():
-        parser = argparse.ArgumentParser(description = "Play the Game of Life")
-        parser.add_argument("-r", "--rows", type = int, default = 20, help = "Height of the game grid")
-        parser.add_argument("-c", "--cols", type = int, default = 40, help = "Width of the game grid")
-        parser.add_argument("-s", "--sleep", type = float, default = 0.1, help = "Time between game steps")
-        return parser.parse_args()
-
-    @staticmethod
-    def main():
-        args = GameOfLife.fetchArgs()
-        gameGrid = GameOfLife(grid = GameOfLife.randomGrid(args.rows, args.cols), sleep = args.sleep)
-        try:
-            gameGrid.theLoop()
-        except KeyboardInterrupt:
-            sys.exit(0)
+        repeat = True
+        while repeat:
+            self.step()
+            self.drawCursesGrid()
+            time.sleep(self.config.sleep)
+            if self.config.die:
+                repeat = self.hasActivity()
+        self.drawCursesMessage("Game Over, press any key to exit")
+        self.window.getch()
 
 
 if __name__ == "__main__":
-    GameOfLife.main()
+    game = GameOfLife()
+    game.main()
