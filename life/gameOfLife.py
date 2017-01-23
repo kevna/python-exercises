@@ -1,9 +1,10 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-import Script
 import re
-import CursesMixin
 import sys, random, os, time, curses
+sys.path.append("../lib/")
+import Script
+import CursesMixin
 
 class GameOfLife(Script.Script, CursesMixin.CursesMixin):
     GENERATIONSTOKEEP = 10

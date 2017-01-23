@@ -20,6 +20,5 @@ class Script(object):
         except KeyboardInterrupt:
             sys.exit(0)
 
-
     def _main(self):
-        pass
+        raise NotImplementedError()
