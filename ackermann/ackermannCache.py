@@ -43,7 +43,7 @@ class AckermannCache(object):
         with open(fileName, "w") as fileHandle:
             for m in self.cache.keys():
                 for n in self.cache[m].keys():
-                    print >> fileHandle, "%d,%d,%d" % (m, n, self.cache[m][n])
+                    print("%d,%d,%d" % (m, n, self.cache[m][n]), file=fileHandle)
 
     def getAckermann(self, m, n):
         result = self.getCache(m, n)
@@ -59,7 +59,7 @@ class AckermannCache(object):
                 result = self.getAckermann(m-1, self.getAckermann(m, n-1))
             self.addCache(m, n, result)
         except (RuntimeError):
-            raise AckermannOverflowError, "Recursion limit of %s reached calculating Ackermann(%d, %d)" % (sys.getrecursionlimit(), m, n)
+            raise AckermannOverflowError("Recursion limit of %s reached calculating Ackermann(%d, %d)" % (sys.getrecursionlimit(), m, n))
         return result
 
     def __str__(self):
@@ -83,7 +83,7 @@ class AckermannCache(object):
         for m in range(maxM):
             for n in range(maxN):
                 a = self.getAckermann(m, n)
-                print "Ackermann(%d, %d) is %d" % (m, n, a)
+                print("Ackermann(%d, %d) is %d" % (m, n, a))
 
     def ackermannTo(self):
         maxA = 65533
@@ -99,7 +99,7 @@ class AckermannCache(object):
             while a < maxA:
                 n += 1
                 a = self.getAckermann(m, n)
-            print "Ackermann(%d, %d) is %d" % (m, n, a)
+            print("Ackermann(%d, %d) is %d" % (m, n, a))
     
     @staticmethod
     def main():
@@ -108,7 +108,7 @@ class AckermannCache(object):
         try:
             cache.ackermannTo()
         except (AckermannOverflowError):
-            print cache.size
+            print(cache.size)
         except (KeyboardInterrupt):
             sys.exit(0)
         cache.saveCache(AckermannCache.CACHEFILE)
