@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-import ColourText
+from sudoku import ColourText
 
 class SudokuCell(object):
     ALLPOSSIBILITIES = (1, 2, 3, 4, 5, 6, 7, 8, 9)

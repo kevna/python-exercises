@@ -1,6 +1,6 @@
-import sorter
+from sorting.sorter import Sorter
 
-class MergeSort(sorter.Sorter):
+class MergeSort(Sorter):
     def sort(self, items, cutoff = None):
         result = self._mergeSort(items)
         self._mutateList(items, result)

@@ -1,6 +1,6 @@
-import sorter
+from sorting.sorter import Sorter
 
-class CocktailShakerSort(sorter.Sorter):
+class CocktailShakerSort(Sorter):
     def _bubbleUp(self, items, cutoff):
         swaps = 0
         for j in range(cutoff, self.length - (cutoff+1))[::-1]:

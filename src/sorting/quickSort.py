@@ -1,6 +1,6 @@
-import sorter
+from sorting.sorter import Sorter
 
-class QuickSort(sorter.Sorter):
+class QuickSort(Sorter):
     def sort(self, items, cutoff = None):
         result = self._quickSort(items)
         self._mutateList(items, result)

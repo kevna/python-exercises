@@ -1,6 +1,6 @@
-import sorter
+from sorting.sorter import Sorter
 
-class InsertionSort(sorter.Sorter):
+class InsertionSort(Sorter):
     def sort(self, items, cutoff = None):
         temp = None
         for i in range(1, len(items)):

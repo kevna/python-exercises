@@ -1,6 +1,6 @@
-import sorter
+from sorting.sorter import Sorter
 
-class OpBubbleSort(sorter.Sorter):
+class OpBubbleSort(Sorter):
     def sort(self, items, cutoff = None):
         swaps = 1
         i = 1

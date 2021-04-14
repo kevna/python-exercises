@@ -1,6 +1,6 @@
-import sorter
+from sorting.sorter import Sorter
 
-class StupidSort(sorter.Sorter):
+class StupidSort(Sorter):
     def sort(self, items, cutoff = None):
         tel = 0
         i = 0

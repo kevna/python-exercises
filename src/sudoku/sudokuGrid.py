@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-import sudokuCell, ColourText
+from sudoku import sudokuCell, ColourText
 from itertools import zip_longest
 
 class SudokuGrid(object):
