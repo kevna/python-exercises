@@ -143,8 +143,8 @@ class SudokuGrid(object):
             row.append(line)
             result.append(" ".join(row))
         result.append(self.generateRow(width))
-        result.append("Total Found: %d" % foundCount)
-        result.append("Remaining Possibilities: %d" % possibilityCount)
+        result.append(f"Total Found: {foundCount}")
+        result.append(f"Remaining Possibilities: {possibilityCount}")
         return"\n" .join(result)
     
     def __len__(self):
