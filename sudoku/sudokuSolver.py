@@ -18,12 +18,12 @@ class SudokuSolver(object):
     def solve(self):
         while not self.grid.isComplete():
             if self.solveStep():
-                print self.grid
+                print(self.grid)
                 self.failedSteps = 0
             else:
                 self.failedSteps += 1
                 if self.failedSteps >= self.failLimit:
-                    raise SolveFailedException, "Couldn't find any more moves toward solution."
+                    raise SolveFailedException("Couldn't find any more moves toward solution.")
 
     @staticmethod
     def args():
@@ -39,6 +39,6 @@ class SudokuSolver(object):
         try:
             solver.solve()
         except KeyboardInterrupt:
-            print "User exit."
+            print("User exit.")
         except SolveFailedException as err:
-            print err.message
+            print(err.message)

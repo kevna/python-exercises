@@ -45,8 +45,8 @@ class SudokuGrid(object):
         return self(newGrid)
 
     def getBoxCoords(self, r, c):
-        subgridR = (r / self.BOX_HEIGHT) * self.BOX_HEIGHT
-        subgridC = (c / self.BOX_WIDTH) * self.BOX_WIDTH
+        subgridR = (r // self.BOX_HEIGHT) * self.BOX_HEIGHT
+        subgridC = (c // self.BOX_WIDTH) * self.BOX_WIDTH
         return subgridR, subgridC
 
     def checkRowComplete(self, r):
@@ -161,7 +161,7 @@ class SudokuGrid(object):
     def main():
         fileName = "testData/web.sud"
         grid = SudokuGrid.loadFile(fileName)
-        print grid
+        print(grid)
 
 if __name__ == "__main__":
     SudokuGrid.main()
