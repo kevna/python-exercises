@@ -67,7 +67,7 @@ class GameOfLife(object):
         for row in self.grid:
             thisRow = []
             for cell in row:
-                if cell
+                if cell:
                     thisRow.append("0") #"\xe2\x96\x88")
                 else:
                     thisRow.append(" ")
