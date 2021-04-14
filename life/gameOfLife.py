@@ -93,7 +93,7 @@ class GameOfLife(object):
         while self.hasActivity():
             self.step()
             os.system("clear")
-            print self
+            print(self)
             time.sleep(0.1)
 
     @staticmethod
