@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import unittest
-import gameOfLife
+from life.gameOfLife import GameOfLife
 
 class Test_GameOfLife(unittest.TestCase):
     def test_cellLives(self):
@@ -36,7 +36,7 @@ class Test_GameOfLife(unittest.TestCase):
             #([], 0, 0, False),
                 )
         for startGrid, testArgX, testArgY, expectedResult in testList:
-            testGrid = gameOfLife.GameOfLife(startGrid)
+            testGrid = GameOfLife(startGrid)
             actualResult = testGrid.cellLives(testArgX, testArgY)
             self.assertEqual(expectedResult, actualResult)
     
@@ -66,7 +66,7 @@ class Test_GameOfLife(unittest.TestCase):
             ]),
                 )
         for startGrid, expectedResult in testList:
-            testGrid = gameOfLife.GameOfLife(startGrid)
+            testGrid = GameOfLife(startGrid)
             testGrid.step()
             actualResult = testGrid.grid
             self.assertEqual(expectedResult, actualResult)
@@ -92,7 +92,7 @@ class Test_GameOfLife(unittest.TestCase):
             #([], 0, 0, False),
                 )
         for startGrid, expectedResult in testList:
-            testGrid = gameOfLife.GameOfLife(startGrid)
+            testGrid = GameOfLife(startGrid)
             actualResult = str(testGrid)
             self.assertEqual(expectedResult, actualResult)
 
@@ -106,7 +106,7 @@ class Test_GameOfLife(unittest.TestCase):
             #([], 0, 0, False),
                 )
         for testArgX, testArgY, expectedX, expectedY in testList:
-            testGrid = gameOfLife.GameOfLife.randomGrid(testArgX, testArgY)
+            testGrid = GameOfLife.randomGrid(testArgX, testArgY)
             actualX = len(testGrid)
             self.assertEqual(expectedX, actualX)
             for x in testGrid:

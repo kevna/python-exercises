@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import unittest
-import sudokuCell
+from sudoku.sudokuCell import SudokuCell
 
 class Test_SudokuCell(unittest.TestCase):
     def test_isPossible(self):
@@ -11,7 +11,7 @@ class Test_SudokuCell(unittest.TestCase):
             (-1, False),
                 )
         for testArgPoss, expectedResult in testList:
-            testCell = sudokuCell.SudokuCell()
+            testCell = SudokuCell()
             actualResult = testCell.isPossible(testArgPoss)
             self.assertEqual(expectedResult, actualResult)
 
@@ -24,7 +24,7 @@ class Test_SudokuCell(unittest.TestCase):
             ([-1], [1, 2, 3, 4, 5, 6, 7, 8, 9], 9),
                 )
         for testArgPossList, expectedPossibilities, expectedPossCount in testList:
-            testCell = sudokuCell.SudokuCell()
+            testCell = SudokuCell()
             for testArgPoss in testArgPossList:
                 testCell.removePossbility(testArgPoss)
             actualPossibilities = testCell.possibilities
@@ -40,7 +40,7 @@ class Test_SudokuCell(unittest.TestCase):
             (None, False),
                 )
         for testArgValue, expectedResult in testList:
-            testCell = sudokuCell.SudokuCell(testArgValue)
+            testCell = SudokuCell(testArgValue)
             actualResult = testCell.isFound()
             self.assertEqual(expectedResult, actualResult)
 
@@ -52,7 +52,7 @@ class Test_SudokuCell(unittest.TestCase):
             (None, "(1, 2, 3, 4, 5, 6, 7, 8, 9)"),
                 )
         for testArgValue, expectedResult in testList:
-            testCell = sudokuCell.SudokuCell(testArgValue)
+            testCell = SudokuCell(testArgValue)
             actualResult = str(testCell)
             self.assertEqual(expectedResult, actualResult)
 
@@ -68,10 +68,10 @@ class Test_SudokuCell(unittest.TestCase):
             (0, -1, [], [], True),
                 )
         for testArgValue1, testArgValue2, testArgPossList1, testArgPossList2, expectedResult in testList:
-            testCell1 = sudokuCell.SudokuCell(testArgValue1)
+            testCell1 = SudokuCell(testArgValue1)
             for testArgPoss in testArgPossList1:
                 testCell1.removePossbility(testArgPoss)
-            testCell2 = sudokuCell.SudokuCell(testArgValue2)
+            testCell2 = SudokuCell(testArgValue2)
             for testArgPoss in testArgPossList2:
                 testCell2.removePossbility(testArgPoss)
             actualResult = testCell1 == testCell2

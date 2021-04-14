@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import unittest
-import sudokuGrid
+from sudoku.sudokuGrid import SudokuGrid
 
 class Test_SudokuGrid(unittest.TestCase):
     def _test_isPossible(self):
@@ -28,7 +28,7 @@ class Test_SudokuGrid(unittest.TestCase):
             #(-1, None),
                 )
         for testArgGrid, testArgR, testArgN, expectedPossibilities in testList:
-            testGrid = sudokuGrid.SudokuGrid(testArgGrid)
+            testGrid = SudokuGrid(testArgGrid)
             testGrid.rowRemovePossibility(testArgR, testArgN)
             for expectedKey in expectedPossibilities:
                 expectedResult = expectedPossibilities[expectedKey]
@@ -50,7 +50,7 @@ class Test_SudokuGrid(unittest.TestCase):
             #(-1, None),
                 )
         for testArgGrid, expectedResult in testList:
-            testGrid = sudokuGrid.SudokuGrid(testArgGrid)
+            testGrid = SudokuGrid(testArgGrid)
             actualResult = testGrid.isComplete()
             self.assertEqual(expectedResult, actualResult)
 
@@ -93,8 +93,8 @@ class Test_SudokuGrid(unittest.TestCase):
             #(-1, None),
                 )
         for testArgGrid1, testArgGrid2, expectedResult in testList:
-            testGrid1 = sudokuGrid.SudokuGrid(testArgGrid1)
-            testGrid2 = sudokuGrid.SudokuGrid(testArgGrid2)
+            testGrid1 = SudokuGrid(testArgGrid1)
+            testGrid2 = SudokuGrid(testArgGrid2)
             actualResult = testGrid1 == testGrid2
             self.assertEqual(expectedResult, actualResult)
 
@@ -109,7 +109,7 @@ class Test_SudokuGrid(unittest.TestCase):
             #(-1, None),
                 )
         for testArgGrid, expectedResult in testList:
-            testGrid = sudokuGrid.SudokuGrid(testArgGrid)
+            testGrid = SudokuGrid(testArgGrid)
             actualResult = str(testGrid)
             self.assertEqual(expectedResult, actualResult)
 

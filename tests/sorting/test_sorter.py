@@ -1,10 +1,10 @@
 import unittest
-import stupidSort
-import insertionSort
-import opBubbleSort
-import cocktailShaker
-import mergeSort
-import quickSort
+from sorting.stupidSort import StupidSort
+from sorting.insertionSort import InsertionSort
+from sorting.opBubbleSort import OpBubbleSort
+from sorting.cocktailShaker import CocktailShakerSort
+from sorting.mergeSort import MergeSort
+from sorting.quickSort import QuickSort
 
 class Test_Sorter(unittest.TestCase):
     TESTLIST = (
@@ -21,22 +21,22 @@ class Test_Sorter(unittest.TestCase):
         
     
     def test_StupidSort(self):
-        self._sortTestHelper(stupidSort.StupidSort)
+        self._sortTestHelper(StupidSort)
 
     def test_InsertionSort(self):
-        self._sortTestHelper(insertionSort.InsertionSort)
+        self._sortTestHelper(InsertionSort)
 
     def test_OpBubbleSort(self):
-        self._sortTestHelper(opBubbleSort.OpBubbleSort)
+        self._sortTestHelper(OpBubbleSort)
 
     def test_CocktailShakerSort(self):
-        self._sortTestHelper(cocktailShaker.CocktailShakerSort)
+        self._sortTestHelper(CocktailShakerSort)
 
     def test_MergeSort(self):
-        self._sortTestHelper(mergeSort.MergeSort)
+        self._sortTestHelper(MergeSort)
 
     def test_QuickSort(self):
-        self._sortTestHelper(quickSort.QuickSort)
+        self._sortTestHelper(QuickSort)
 
             
 if __name__ == "__main__":
