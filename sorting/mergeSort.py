@@ -9,7 +9,7 @@ class MergeSort(sorter.Sorter):
     def _mergeSort(self, items):
         if len(items) <= 1:
             return items
-        split = len(items) / 2
+        split = len(items) // 2
         leftList = self._mergeSort(items[:split])
         rightList = self._mergeSort(items[split:])
         return self._mergeLists(leftList, rightList)

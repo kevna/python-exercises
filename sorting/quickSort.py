@@ -2,12 +2,15 @@ import sorter
 
 class QuickSort(sorter.Sorter):
     def sort(self, items, cutoff = None):
-        items = self._quickSort(items)
+        result = self._quickSort(items)
+        for i in range(len(items)):
+            items[i] = result[i]
+        items.extend(result[len(items):])
 
     def _quickSort(self, items):
         if len(items) < 2:
             return items
-        split = len(items) / 2
+        split = len(items) // 2
         pivot = items[split]
         items.remove(pivot)
 
