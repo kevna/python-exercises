@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import sys, random, os, time
+from itertools import zip_longest
 
 class GameOfLife(object):
     GENERATIONSTOKEEP = 10
@@ -14,13 +15,10 @@ class GameOfLife(object):
 
     def compareGrids(self, gridA, gridB):
         matchCount = 0
-        for row in range(len(gridA)):
-            for col in range(len(gridA[row])):
-                try:
-                    if gridA[row][col] == gridB[row][col]:
-                        matchCount += 1
-                except IndexError:
-                    pass
+        for rowA, rowB in zip_longest(gridA, gridB, fillvalue=[]):
+            for cellA, cellB in zip_longest(rowA, rowB):
+                if cellA == cellB:
+                    matchCount += 1
         return matchCount
 
     def hasActivity(self):
@@ -66,10 +64,10 @@ class GameOfLife(object):
     
     def __str__(self):
         allRows = []
-        for row in range(len(self.grid)):
+        for row in self.grid:
             thisRow = []
-            for col in range(len(self.grid[row])):
-                if self.grid[row][col]:
+            for cell in row:
+                if cell
                     thisRow.append("0") #"\xe2\x96\x88")
                 else:
                     thisRow.append(" ")

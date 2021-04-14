@@ -3,9 +3,7 @@ import sorter
 class QuickSort(sorter.Sorter):
     def sort(self, items, cutoff = None):
         result = self._quickSort(items)
-        for i in range(len(items)):
-            items[i] = result[i]
-        items.extend(result[len(items):])
+        self._mutateList(items, result)
 
     def _quickSort(self, items):
         if len(items) < 2:
@@ -17,11 +15,11 @@ class QuickSort(sorter.Sorter):
         lowList = []
         highList = []
 
-        for i in range(len(items)):
-            if items[i] <= pivot:
-                lowList.append(items[i])
+        for item in items:
+            if item <= pivot:
+                lowList.append(item)
             else:
-                highList.append(items[i])
+                highList.append(item)
         if len(lowList) > 1:
             lowList = self._quickSort(lowList)
         if len(highList) > 1:

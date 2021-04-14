@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import sudokuCell, ColourText
+from itertools import zip_longest
 
 class SudokuGrid(object):
     GRID_HEIGHT = 9
@@ -20,10 +21,10 @@ class SudokuGrid(object):
         self._completeCols = []
         self._completeBoxes = []
         newGrid = []
-        for r in range(len(grid)):
+        for row in grid:
             newRow = []
-            for c in range(len(grid[r])):
-                newRow.append(sudokuCell.SudokuCell(grid[r][c]))
+            for cell in row:
+                newRow.append(sudokuCell.SudokuCell(cell))
             newGrid.append(tuple(newRow))
         self._grid = tuple(newGrid)
         self.failedSteps = 0
@@ -53,8 +54,8 @@ class SudokuGrid(object):
         if r in self._completeRows:
             return True
         result = False
-        for c in range(len(self._grid[r])):
-            if not self._grid[r][c].isFound():
+        for cell in self._grid[r]:
+            if not cell.isFound():
                 break
         else:
             self._completeRows.append(r)
@@ -65,8 +66,8 @@ class SudokuGrid(object):
         if c in self._completeCols:
             return True
         result = False
-        for r in range(len(self._grid)):
-            if not self._grid[r][c].isFound():
+        for row in self._grid:
+            if not row[c].isFound():
                 break
         else:
             self._completeCols.append(c)
@@ -97,16 +98,11 @@ class SudokuGrid(object):
     def __eq__(self, other):
         if not isinstance(other, SudokuGrid):
             return False
-        result = True
-        try:
-            for r in range(len(self._grid)):
-                for c in range(len(self._grid[r])):
-                    if not self._grid[r][c] == other.grid[r][c]:
-                        return False
-        except IndexError:
-            # An index on self._grid didn't exist in other.grid so they must be different shapes
-            result = False
-        return result
+        for ourRow, theirRow in zip_longest(self._grid, other._grid, fillvalue=[]):
+            for ourCell, theirCell in zip_longest(ourRow, theirRow):
+                if not ourCell == theirCell:
+                    return False
+        return True
 
     def generateRow(self, width):
         row = []
