@@ -1,4 +1,5 @@
-import unittest
+import pytest
+
 from sorting.stupidSort import StupidSort
 from sorting.insertionSort import InsertionSort
 from sorting.opBubbleSort import OpBubbleSort
@@ -6,38 +7,39 @@ from sorting.cocktailShaker import CocktailShakerSort
 from sorting.mergeSort import MergeSort
 from sorting.quickSort import QuickSort
 
-class Test_Sorter(unittest.TestCase):
+class TestSorter:
     TESTLIST = (
         ([6, 2, 4, 1, 3], [1, 2, 3, 4, 6]),
         ([-5, -1, -3, -10], [-10, -5, -3, -1]),
         (["twelve", "three", "one"], ["one", "three", "twelve"]),
             )
-    def _sortTestHelper(self, testSortObj):
+
+    def _sortTestHelper(self, testSortObj, testArgItems, expectedResult):
         testSorter = testSortObj()
-        for testArgItems, expectedResult in self.TESTLIST:
-            actualResult = testArgItems[:]
-            testSorter.sort(actualResult)
-            self.assertEqual(expectedResult, actualResult)
-        
-    
-    def test_StupidSort(self):
-        self._sortTestHelper(StupidSort)
+        actualResult = testArgItems[:]
+        testSorter.sort(actualResult)
+        assert actualResult == expectedResult
 
-    def test_InsertionSort(self):
-        self._sortTestHelper(InsertionSort)
+    @pytest.mark.parametrize('testArgItems, expectedResult', TESTLIST)
+    def test_StupidSort(self, testArgItems, expectedResult):
+        self._sortTestHelper(StupidSort, testArgItems, expectedResult)
 
-    def test_OpBubbleSort(self):
-        self._sortTestHelper(OpBubbleSort)
+    @pytest.mark.parametrize('testArgItems, expectedResult', TESTLIST)
+    def test_InsertionSort(self, testArgItems, expectedResult):
+        self._sortTestHelper(InsertionSort, testArgItems, expectedResult)
 
-    def test_CocktailShakerSort(self):
-        self._sortTestHelper(CocktailShakerSort)
+    @pytest.mark.parametrize('testArgItems, expectedResult', TESTLIST)
+    def test_OpBubbleSort(self, testArgItems, expectedResult):
+        self._sortTestHelper(OpBubbleSort, testArgItems, expectedResult)
 
-    def test_MergeSort(self):
-        self._sortTestHelper(MergeSort)
+    @pytest.mark.parametrize('testArgItems, expectedResult', TESTLIST)
+    def test_CocktailShakerSort(self, testArgItems, expectedResult):
+        self._sortTestHelper(CocktailShakerSort, testArgItems, expectedResult)
 
-    def test_QuickSort(self):
-        self._sortTestHelper(QuickSort)
+    @pytest.mark.parametrize('testArgItems, expectedResult', TESTLIST)
+    def test_MergeSort(self, testArgItems, expectedResult):
+        self._sortTestHelper(MergeSort, testArgItems, expectedResult)
 
-            
-if __name__ == "__main__":
-    unittest.main()
+    @pytest.mark.parametrize('testArgItems, expectedResult', TESTLIST)
+    def test_QuickSort(self, testArgItems, expectedResult):
+        self._sortTestHelper(QuickSort, testArgItems, expectedResult)
