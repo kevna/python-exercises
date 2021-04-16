@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-from ackermann.ackermannCache import AckermannCache
+from ackermann.ackermann import AckermannCache
 
-class TestAckerman:
+class TestAckermannCache:
     @pytest.mark.parametrize('testArgM, testArgN, expectedResult', (
         (-1, -1, 0),
         (0, 0, 1),
@@ -20,7 +20,7 @@ class TestAckerman:
         (4, 0, 13),
         (4, 1, 65533),
     ))
-    def test_getAckermann(self, testArgM, testArgN, expectedResult):
+    def test_get_ackermann(self, testArgM, testArgN, expectedResult):
         testCache = AckermannCache()
-        actualResult = testCache.getAckermann(testArgM, testArgN)
+        actualResult = testCache.get_ackermann(testArgM, testArgN)
         assert actualResult == expectedResult
