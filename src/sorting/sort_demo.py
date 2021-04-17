@@ -1,6 +1,6 @@
-def readData(fileName):
+def readData(filename):
     result = []
-    with open(fileName) as fileHandle:
-        for line in fileHandle:
+    with open(filename) as file:
+        for line in file:
             result.append(line)
     return result

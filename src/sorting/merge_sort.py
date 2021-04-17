@@ -2,28 +2,28 @@ from sorting.sorter import Sorter
 
 class MergeSort(Sorter):
     def sort(self, items, cutoff = None):
-        result = self._mergeSort(items)
-        self._mutateList(items, result)
+        result = self._merge_sort(items)
+        self._mutate_list(items, result)
 
-    def _mergeSort(self, items):
+    def _merge_sort(self, items):
         if len(items) <= 1:
             return items
         split = len(items) // 2
-        leftList = self._mergeSort(items[:split])
-        rightList = self._mergeSort(items[split:])
-        return self._mergeLists(leftList, rightList)
+        left_list = self._merge_sort(items[:split])
+        right_list = self._merge_sort(items[split:])
+        return self._merge_lists(left_list, right_list)
 
-    def _mergeLists(self, leftList, rightList):
-        leftOffset, rightOffset = (0, 0)
-        leftLen = len(leftList)
-        rightLen = len(rightList)
+    def _merge_lists(self, left_list, right_list):
+        left_offset, right_offset = (0, 0)
+        left_len = len(left_list)
+        right_len = len(right_list)
         result = []
-        while leftOffset < leftLen and rightOffset < rightLen:
-            if leftList[leftOffset] < rightList[rightOffset]:
-                result.append(leftList[leftOffset])
-                leftOffset += 1
+        while left_offset < left_len and right_offset < right_len:
+            if left_list[left_offset] < right_list[right_offset]:
+                result.append(left_list[left_offset])
+                left_offset += 1
             else:
-                result.append(rightList[rightOffset])
-                rightOffset += 1
-        result += leftList[leftOffset:] + rightList[rightOffset:]
+                result.append(right_list[right_offset])
+                right_offset += 1
+        result += left_list[left_offset:] + right_list[right_offset:]
         return result

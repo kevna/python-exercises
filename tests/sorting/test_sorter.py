@@ -1,11 +1,11 @@
 import pytest
 
-from sorting.stupidSort import StupidSort
-from sorting.insertionSort import InsertionSort
-from sorting.opBubbleSort import OpBubbleSort
-from sorting.cocktailShaker import CocktailShakerSort
-from sorting.mergeSort import MergeSort
-from sorting.quickSort import QuickSort
+from sorting.stupid_sort import StupidSort
+from sorting.insertion_sort import InsertionSort
+from sorting.bubble_sort import OpBubbleSort
+from sorting.cocktail_shaker import CocktailShakerSort
+from sorting.merge_sort import MergeSort
+from sorting.quick_sort import QuickSort
 
 class TestSorter:
     TESTLIST = (

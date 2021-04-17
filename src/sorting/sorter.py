@@ -1,5 +1,5 @@
 class Sorter(object):
-    def _mutateList(self, subject, update):
+    def _mutate_list(self, subject, update):
         overwrite = len(subject)
         for i in range(overwrite):
             subject[i] = update[i]
