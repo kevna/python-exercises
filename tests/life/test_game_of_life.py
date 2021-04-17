@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-from life.gameOfLife import GameOfLife
+from life.game_of_life import GameOfLife
 
 class TestGameOfLife:
     @pytest.mark.parametrize('startGrid, testArgX, testArgY, expectedResult', (
@@ -35,9 +35,9 @@ class TestGameOfLife:
         ], 0, -1, False),
         #([], 0, 0, False),
     ))
-    def test_cellLives(self, startGrid, testArgX, testArgY, expectedResult):
+    def test_cell_lives(self, startGrid, testArgX, testArgY, expectedResult):
         testGrid = GameOfLife(startGrid)
-        actualResult = testGrid.cellLives(testArgX, testArgY)
+        actualResult = testGrid.cell_lives(testArgX, testArgY)
         assert actualResult == expectedResult
     
     @pytest.mark.parametrize('startGrid, expectedResult', (
@@ -102,8 +102,8 @@ class TestGameOfLife:
         (-1, -10, 0, 0),
         #([], 0, 0, False),
     ))
-    def test_randomGrid(self, testArgX, testArgY, expectedX, expectedY):
-        testGrid = GameOfLife.randomGrid(testArgX, testArgY)
+    def test_random_grid(self, testArgX, testArgY, expectedX, expectedY):
+        testGrid = GameOfLife.random_grid(testArgX, testArgY)
         actualX = len(testGrid)
         assert actualX == expectedX
         for x in testGrid:
