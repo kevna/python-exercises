@@ -5,55 +5,73 @@ import pytest
 from sudoku.sudokuCell import SudokuCell
 
 class TestSudokuCell:
-    @pytest.mark.parametrize('testArgPoss, expectedResult', (
+    @pytest.mark.parametrize('possibility, expected', (
         (1, True),
         (0, False),
         (-1, False),
     ))
-    def test_is_possible(self, testArgPoss, expectedResult):
-        testCell = SudokuCell()
-        actualResult = testCell.is_possible(testArgPoss)
-        assert actualResult == expectedResult
+    def test_is_possible(self, possibility, expected):
+        cell = SudokuCell()
+        actual = cell.is_possible(possibility)
+        assert actual == expected
 
-    @pytest.mark.parametrize('testArgPossList, expected_possibilities, expectedPossCount', (
-        ([1], [2, 3, 4, 5, 6, 7, 8, 9], 8),
-        ([1, 9], [2, 3, 4, 5, 6, 7, 8], 7),
-        ([2, 3, 4, 5, 6, 7, 8, 9], None, 0),
-        ([0], [1, 2, 3, 4, 5, 6, 7, 8, 9], 9),
-        ([-1], [1, 2, 3, 4, 5, 6, 7, 8, 9], 9),
+    @pytest.mark.parametrize('possibilities, expected_possibilities', (
+        ([1], [2, 3, 4, 5, 6, 7, 8, 9]),
+        ([1, 9], [2, 3, 4, 5, 6, 7, 8]),
+        ([2, 3, 4, 5, 6, 7, 8, 9], None),
+        ([0], [1, 2, 3, 4, 5, 6, 7, 8, 9]),
+        ([-1], [1, 2, 3, 4, 5, 6, 7, 8, 9]),
     ))
-    def test_remove_posibility(self, testArgPossList, expected_possibilities, expectedPossCount):
-        testCell = SudokuCell()
-        for testArgPoss in testArgPossList:
-            testCell.remove_possibility(testArgPoss)
-        actual_possibilities = testCell.possibilities
-        # TODO actualPossCount = testCell.possibilityCount
+    def test_remove_posibility(self, possibilities, expected_possibilities):
+        cell = SudokuCell()
+        for possibility in possibilities:
+            cell.remove_possibility(possibility)
+        actual_possibilities = cell.possibilities
         assert actual_possibilities == expected_possibilities
-        # TODO assert actualPossCount == expectedPossCount
 
-    @pytest.mark.parametrize('testArgValue, expectedResult', (
+    @pytest.mark.parametrize('value, expected', (
         (1, True),
         (0, False),
         (-1, False),
         (None, False),
     ))
-    def test_is_found(self, testArgValue, expectedResult):
-        testCell = SudokuCell(testArgValue)
-        actualResult = testCell.is_found()
-        assert actualResult == expectedResult
+    def test_is_found(self, value, expected):
+        cell = SudokuCell(value)
+        actual = cell.is_found()
+        assert actual == expected
 
-    @pytest.mark.parametrize('testArgValue, expectedResult', (
-        (1, "1"),
-        (0, "(1, 2, 3, 4, 5, 6, 7, 8, 9)"),
-        (-1, "(1, 2, 3, 4, 5, 6, 7, 8, 9)"),
-        (None, "(1, 2, 3, 4, 5, 6, 7, 8, 9)"),
+    @pytest.mark.parametrize('value, expected', (
+        (1, '1'),
+        (0, '[1, 2, 3, 4, 5, 6, 7, 8, 9]'),
+        (-1, '[1, 2, 3, 4, 5, 6, 7, 8, 9]'),
+        (None, '[1, 2, 3, 4, 5, 6, 7, 8, 9]'),
     ))
-    def test_str(self, testArgValue, expectedResult):
-        testCell = SudokuCell(testArgValue)
-        actualResult = str(testCell)
-        assert actualResult == expectedResult
+    def test_repr(self, value, expected):
+        cell = SudokuCell(value)
+        actual = repr(cell)
+        assert actual == expected
 
-    @pytest.mark.parametrize('testArgValue1, testArgValue2, testArgPossList1, testArgPossList2, expectedResult', (
+    @pytest.mark.parametrize('value, expected', (
+        (1, '1'),
+        (0, ' '),
+        (None, ' '),
+    ))
+    def test_str_original(self, value, expected):
+        cell = SudokuCell(value)
+        actual = str(cell)
+        assert actual == expected
+
+    @pytest.mark.parametrize('value, expected', (
+        (1, '1'),
+        (None, ' '),
+    ))
+    def test_str_found(self, value, expected):
+        cell = SudokuCell()
+        cell.set_value(value)
+        actual = str(cell)
+        assert actual == expected
+
+    @pytest.mark.parametrize('value1, value2, possibilities1, possibilities2, expected', (
         (1, 1, [], [], True),
         (0, 0, [], [], True),
         (0, 0, [1, 2], [8, 9], False),
@@ -63,12 +81,12 @@ class TestSudokuCell:
         (None, 1, [], [], False),
         (0, -1, [], [], True),
     ))
-    def test_eq(self, testArgValue1, testArgValue2, testArgPossList1, testArgPossList2, expectedResult):
-        testCell1 = SudokuCell(testArgValue1)
-        for testArgPoss in testArgPossList1:
-            testCell1.remove_possibility(testArgPoss)
-        testCell2 = SudokuCell(testArgValue2)
-        for testArgPoss in testArgPossList2:
-            testCell2.remove_possibility(testArgPoss)
-        actualResult = testCell1 == testCell2
-        assert actualResult == expectedResult
+    def test_eq(self, value1, value2, possibilities1, possibilities2, expected):
+        cell1 = SudokuCell(value1)
+        for possibility in possibilities1:
+            cell1.remove_possibility(possibility)
+        cell2 = SudokuCell(value2)
+        for possibility in possibilities2:
+            cell2.remove_possibility(possibility)
+        actual = cell1 == cell2
+        assert actual == expected

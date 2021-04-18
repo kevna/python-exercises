@@ -4,18 +4,9 @@ import pytest
 
 from sudoku.sudokuGrid import SudokuGrid
 
-class TestSudokuGrid:
-    @pytest.mark.parametrize('testArgPoss, expectedResult', (
-        (1, True),
-        (0, False),
-        (-1, False),
-    ))
-    def _test_is_possible(self, testArgPoss, expectedResult):
-        testCell = sudokuCell.SudokuCell()
-        actualResult = testCell.is_possible(testArgPoss)
-        assert actualResult == expectedResult
 
-    @pytest.mark.parametrize('testArgGrid, testArgR, testArgN, expected_possibilities', (
+class TestSudokuGrid:
+    @pytest.mark.parametrize('grid_arg, arg_row, arg_number, exp_possibilities', (
         #([], True),
         #([[]], True),
         #([
@@ -26,15 +17,15 @@ class TestSudokuGrid:
         #], False),
         #(-1, None),
     ))
-    def test_row_remove_possibility(self, testArgGrid, testArgR, testArgN, expected_possibilities):
-        testGrid = SudokuGrid(testArgGrid)
-        testGrid.row_remove_possibility(testArgR, testArgN)
-        for expectedKey in expected_possibilities:
-            expectedResult = expected_possibilities[expectedKey]
-            actualResult = testGrid.grid[0][expectedKey]
-            assert actualResult == expectedResult
+    def test_row_remove_possibility(self, grid_arg, arg_row, arg_number, exp_possibilities):
+        grid = SudokuGrid(grid_arg)
+        grid.row_remove_possibility(arg_row, arg_number)
+        for exp_key in exp_possibilities:
+            expected = exp_possibilities[exp_key]
+            actual = grid.grid[0][exp_key]
+            assert actual == expected
 
-    @pytest.mark.parametrize('testArgGrid, expectedResult', (
+    @pytest.mark.parametrize('grid_arg, expected', (
         ([], True),
         ([[]], True),
         ([
@@ -47,12 +38,12 @@ class TestSudokuGrid:
         ], False),
         #(-1, None),
     ))
-    def test_is_complete(self, testArgGrid, expectedResult):
-        testGrid = SudokuGrid(testArgGrid)
-        actualResult = testGrid.is_complete()
-        assert actualResult == expectedResult
+    def test_is_complete(self, grid_arg, expected):
+        grid = SudokuGrid(grid_arg)
+        actual = grid.is_complete()
+        assert actual == expected
 
-    @pytest.mark.parametrize('testArgGrid1, testArgGrid2, expectedResult', (
+    @pytest.mark.parametrize('grid1_arg, grid2_arg, expected', (
         #([], [], True),
         #([[]], [[]], True),
         ([
@@ -89,22 +80,28 @@ class TestSudokuGrid:
         ], True),
         #(-1, None),
     ))
-    def test_eq(self, testArgGrid1, testArgGrid2, expectedResult):
-        testGrid1 = SudokuGrid(testArgGrid1)
-        testGrid2 = SudokuGrid(testArgGrid2)
-        actualResult = testGrid1 == testGrid2
-        assert actualResult == expectedResult
+    def test_eq(self, grid1_arg, grid2_arg, expected):
+        grid1 = SudokuGrid(grid1_arg)
+        grid2 = SudokuGrid(grid2_arg)
+        actual = grid1 == grid2
+        assert actual == expected
 
-    @pytest.mark.parametrize('testArgGrid, expectedResult', (
-        ([], "|"),
-        ([[]], "|\n|\n|"),
-        ([
-            [1, 2, 3, 4, 5, 6, 7, 8, 9],
-            [2, 3, 4, 5, 6, 7, 8, 9, 1],
-        ], "|-------|-------|-------|\n| 1 2 3 | 4 5 6 | 7 8 9 |\n| 2 3 4 | 5 6 7 | 8 9 1 |\n|-------|-------|-------|"),
+    @pytest.mark.parametrize('grid_arg, expected', (
+        ([], '|'),
+        ([[]], '|\n|\n|'),
+        (
+            [
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [2, 3, 4, 5, 6, 7, 8, 9, 1],
+            ],
+            '|-------|-------|-------|\n'
+            '| 1 2 3 | 4 5 6 | 7 8 9 |\n'
+            '| 2 3 4 | 5 6 7 | 8 9 1 |\n'
+            '|-------|-------|-------|'
+        ),
         #(-1, None),
     ))
-    def test_str(self, testArgGrid, expectedResult):
-        testGrid = SudokuGrid(testArgGrid)
-        actualResult = str(testGrid)
-        assert actualResult == expectedResult
+    def test_str(self, grid_arg, expected):
+        grid = SudokuGrid(grid_arg)
+        actual = str(grid)
+        assert actual == expected

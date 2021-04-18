@@ -54,7 +54,7 @@ toml = ["toml"]
 
 [[package]]
 name = "importlib-metadata"
-version = "3.10.1"
+version = "4.0.0"
 description = "Read metadata from Python packages"
 category = "dev"
 optional = false
@@ -181,6 +181,18 @@ toml = ">=0.7.1"
 docs = ["sphinx (==3.5.1)", "python-docs-theme (==2020.12)"]
 
 [[package]]
+name = "pylint-pytest"
+version = "0.3.0"
+description = "A Pylint plugin to suppress pytest-related false positives."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pylint = "*"
+pytest = ">=4.6"
+
+[[package]]
 name = "pylint-quotes"
 version = "0.2.1"
 description = "Quote consistency checker for PyLint.."
@@ -283,7 +295,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.6,<4"
-content-hash = "38a1960950803a590f58b4ee8998bd4379090f75ee02246e89e9a1e848edf5fa"
+content-hash = "4bc3a9a8f8edee6ed096750859337f494ebefa2946e0c88f2246b4c3aebf2937"
 
 [metadata.files]
 astroid = [
@@ -357,8 +369,8 @@ coverage = [
     {file = "coverage-5.5.tar.gz", hash = "sha256:ebe78fe9a0e874362175b02371bdfbee64d8edc42a044253ddf4ee7d3c15212c"},
 ]
 importlib-metadata = [
-    {file = "importlib_metadata-3.10.1-py3-none-any.whl", hash = "sha256:2ec0faae539743ae6aaa84b49a169670a465f7f5d64e6add98388cc29fd1f2f6"},
-    {file = "importlib_metadata-3.10.1.tar.gz", hash = "sha256:c9356b657de65c53744046fa8f7358afe0714a1af7d570c00c3835c2d724a7c1"},
+    {file = "importlib_metadata-4.0.0-py3-none-any.whl", hash = "sha256:19192b88d959336bfa6bdaaaef99aeafec179eca19c47c804e555703ee5f07ef"},
+    {file = "importlib_metadata-4.0.0.tar.gz", hash = "sha256:2e881981c9748d7282b374b68e759c87745c25427b67ecf0cc67fb6637a1bff9"},
 ]
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
@@ -439,6 +451,9 @@ py = [
 pylint = [
     {file = "pylint-2.7.4-py3-none-any.whl", hash = "sha256:209d712ec870a0182df034ae19f347e725c1e615b2269519ab58a35b3fcbbe7a"},
     {file = "pylint-2.7.4.tar.gz", hash = "sha256:bd38914c7731cdc518634a8d3c5585951302b6e2b6de60fbb3f7a0220e21eeee"},
+]
+pylint-pytest = [
+    {file = "pylint_pytest-0.3.0-py2.py3-none-any.whl", hash = "sha256:87045fda0987bd3624049b70c42638dfa52944cd77d03c372a3ea9612e5757bc"},
 ]
 pylint-quotes = [
     {file = "pylint-quotes-0.2.1.tar.gz", hash = "sha256:c53d2a63b4cd16c9fa426d243de6396910ff04c65001efdbea37427d401fce72"},

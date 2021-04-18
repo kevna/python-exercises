@@ -5,7 +5,7 @@ import pytest
 from ackermann.ackermann import AckermannCache
 
 class TestAckermannCache:
-    @pytest.mark.parametrize('testArgM, testArgN, expectedResult', (
+    @pytest.mark.parametrize('arg_m, arg_n, expected', (
         (-1, -1, 0),
         (0, 0, 1),
         (0, 5, 6),
@@ -20,7 +20,7 @@ class TestAckermannCache:
         (4, 0, 13),
         (4, 1, 65533),
     ))
-    def test_get_ackermann(self, testArgM, testArgN, expectedResult):
-        testCache = AckermannCache()
-        actualResult = testCache.get_ackermann(testArgM, testArgN)
-        assert actualResult == expectedResult
+    def test_get_ackermann(self, arg_m, arg_n, expected):
+        ackermann = AckermannCache()
+        actual = ackermann.get_ackermann(arg_m, arg_n)
+        assert actual == expected
