@@ -4,7 +4,7 @@ POETRY := poetry run
 
 lint:
 	$(POETRY) mypy src tests
-	$(POETRY) pylint src
+	$(POETRY) pylint --fail-under=9.5 src
 	cd tests && $(POETRY) pylint tests
 
 REPORT := term-missing:skip-covered
