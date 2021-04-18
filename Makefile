@@ -2,10 +2,13 @@ POETRY := poetry run
 
 .PHONY: test
 
+ifdef threshold
+THRESHOLD := --fail-under=$(threshold)
+endif
 lint:
 	$(POETRY) mypy src tests
-	$(POETRY) pylint --fail-under=9.5 src
-	cd tests && $(POETRY) pylint tests
+	$(POETRY) pylint $(THRESHOLD) src
+	cd tests && $(POETRY) pylint $(THRESHOLD) tests
 
 REPORT := term-missing:skip-covered
 test:

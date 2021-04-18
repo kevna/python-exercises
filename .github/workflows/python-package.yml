@@ -35,6 +35,6 @@ jobs:
         poetry config virtualenvs.path ~/.virtualenvs
         poetry install
     - name: Lint with pylint and mypy
-      run: make lint
+      run: make lint threshold=9.5
     - name: Test with pytest
       run: make test
