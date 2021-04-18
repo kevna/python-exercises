@@ -1,6 +1,6 @@
 import argparse
 
-from sudokuGrid import SudokuGrid
+from sudoku.sudokuGrid import SudokuGrid
 
 
 class SolveFailedException(Exception):
@@ -11,17 +11,17 @@ class SudokuSolver:
 
     STEPFAILLIMIT = 9
 
-    def __init__(self, filename, fail_limit = STEPFAILLIMIT):
+    def __init__(self, filename: str, fail_limit: int = STEPFAILLIMIT):
         self.grid = SudokuGrid.load_file(filename)
         self.fail_limit = fail_limit
         self.failed_steps = 0
 
-    def solve_step(self):
+    def solve_step(self) -> int:
         """Perform a single step of solving the sudoku.
         This is intended to be overridden by subclasses to implement
         various methods of solving.
         """
-        return False
+        return 0
 
     def solve(self):
         """Attempt to solve the sudoku.

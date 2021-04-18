@@ -4,21 +4,24 @@ import sys
 from random import randint
 import os
 import time
+from typing import Sequence
 
 from itertools import zip_longest
+
+GameGrid = Sequence[Sequence[bool]]
 
 class GameOfLife:
     """Simulation of Jogn Conways game of life."""
     GENERATIONSTOKEEP = 10
 
-    def __init__(self, grid):
+    def __init__(self, grid: GameGrid):
         self.grid = grid
         self.grid_size = 0
         for row in grid:
             self.grid_size += len(row)
-        self.stored_generations = []
+        self.stored_generations: list[GameGrid] = []
 
-    def compare_grids(self, grid_a, grid_b):
+    def compare_grids(self, grid_a: GameGrid, grid_b: GameGrid):
         """Compare generations of the internal grid representation.
         This counts the cells that are in matching state between the grids.
         """
@@ -55,7 +58,7 @@ class GameOfLife:
         if len(self.stored_generations) > self.GENERATIONSTOKEEP:
             del self.stored_generations[0]
 
-    def cell_lives(self, row, col):
+    def cell_lives(self, row: int, col: int) -> bool:
         """Test whether a cell should survive from the previous generation into a new one.
         This is done by counting the 8 (orthogonal and diagonal) neighbouring cells
         and then applying the classic game of life rules: B3/S23.
@@ -103,7 +106,7 @@ class GameOfLife:
         return '\n'.join(result)
 
     @staticmethod
-    def random_grid(rows, cols):
+    def random_grid(rows: int, cols: int) -> GameGrid:
         """Generate a new randomly-distributed grid."""
         new_grid = []
         for _ in range(rows):

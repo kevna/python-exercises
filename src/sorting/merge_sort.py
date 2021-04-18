@@ -1,14 +1,15 @@
-from sorting.sorter import Sorter
+from sorting.sorter import Sorter, SortList
 
 class MergeSort(Sorter):
     """Implementation of merge sort.
     Divide the list in half, sort each half and merge them in order.
     """
-    def sort(self, items, cutoff = None):
+
+    def sort(self, items: SortList, cutoff: int = None):
         result = self._merge_sort(items)
         self._mutate_list(items, result)
 
-    def _merge_sort(self, items):
+    def _merge_sort(self, items: SortList):
         if len(items) <= 1:
             return items
         split = len(items) // 2
@@ -16,7 +17,7 @@ class MergeSort(Sorter):
         right_list = self._merge_sort(items[split:])
         return self._merge_lists(left_list, right_list)
 
-    def _merge_lists(self, left_list, right_list):
+    def _merge_lists(self, left_list: SortList, right_list: SortList):
         left_offset, right_offset = (0, 0)
         left_len = len(left_list)
         right_len = len(right_list)

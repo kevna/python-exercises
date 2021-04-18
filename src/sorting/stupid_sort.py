@@ -1,4 +1,4 @@
-from sorting.sorter import Sorter
+from sorting.sorter import Sorter, SortList
 
 class StupidSort(Sorter):
     """Implementation of stupid sort, also known as gnome sort.
@@ -6,7 +6,7 @@ class StupidSort(Sorter):
     otherwise step forward.
     """
 
-    def sort(self, items, cutoff = None):
+    def sort(self, items: SortList, cutoff: int = None):
         tel = 0
         i = 0
         while i < len(items) - 1:

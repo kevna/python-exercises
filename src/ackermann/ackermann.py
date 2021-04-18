@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import sys
+from typing import Dict
 
 class AckermannOverflowError(RuntimeError):
     """Error class for ackermann"""
@@ -13,7 +14,7 @@ class AckermannCache:
 
     def __init__(self):
         sys.setrecursionlimit(25000)
-        self.cache = {}
+        self.cache: Dict[int, Dict[int, int]] = {}
         self.size = 0
         self.read_size = 0
 
@@ -26,7 +27,7 @@ class AckermannCache:
         self.cache[m][n] = value
         self.size += 1
 
-    def get_cache(self, m, n):
+    def get_cache(self, m: int, n: int) -> int:
         """Get a result from the internal cache."""
         try:
             result = self.cache[m][n]
@@ -34,7 +35,7 @@ class AckermannCache:
             result = False
         return result
 
-    def load_cache(self, filename):
+    def load_cache(self, filename: str):
         """Load a cache record from a persistant file."""
         with open(filename) as file:
             for line in file:
@@ -42,7 +43,7 @@ class AckermannCache:
                 self.add_cache(int(m), int(n), int(value))
         self.read_size = self.size
 
-    def save_cache(self, filename):
+    def save_cache(self, filename: str):
         """Save a cache record to a persistant file."""
         if self.size <= self.read_size:
             return
@@ -51,7 +52,7 @@ class AckermannCache:
                 for n in self.cache[m]:
                     print(f'{m},{n},{self.cache[m][n]}', file=file)
 
-    def get_ackermann(self, m, n):
+    def get_ackermann(self, m: int, n: int) -> int:
         """Calculate the ackermann-péter function of m and n.
         This is recursive and grows quite quickly.
         Caching is used to avoid re-computing known values.

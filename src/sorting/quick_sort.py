@@ -1,4 +1,4 @@
-from sorting.sorter import Sorter
+from sorting.sorter import Sorter, SortList
 
 class QuickSort(Sorter):
     """Implementation of quick sort.
@@ -8,11 +8,12 @@ class QuickSort(Sorter):
     Pivot is picked naively using the middle item of the list which could belong
     at one end of the list, reducing efficiency.
     """
-    def sort(self, items, cutoff = None):
+
+    def sort(self, items: SortList, cutoff: int = None):
         result = self._quick_sort(items)
         self._mutate_list(items, result)
 
-    def _quick_sort(self, items):
+    def _quick_sort(self, items: SortList):
         if len(items) < 2:
             return items
         split = len(items) // 2

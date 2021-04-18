@@ -1,4 +1,4 @@
-from sorting.sorter import Sorter
+from sorting.sorter import Sorter, SortList
 
 class OpBubbleSort(Sorter):
     """Implementation of optimised bubble sort.
@@ -6,7 +6,8 @@ class OpBubbleSort(Sorter):
     This bubbles the highest value to the end of the list, the next pass is one shorter.
     Optimisation: if no swaps were made everything else is sorted, we can shortcut out.
     """
-    def sort(self, items, cutoff = None):
+
+    def sort(self, items: SortList, cutoff: int = None):
         swaps = 1
         i = 1
         length = len(items)
