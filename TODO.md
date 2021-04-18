@@ -10,3 +10,18 @@ life
     - this would make it easier to enforce grids being immutable
     - compare_grids could be replaced with Grid.__xor__ by counting differences rather than matches
     - perhaps Game.__iter__ handles the step function by yielding the new game grid?
+
+sudoku
+------
+- [ ] make cell value a property
+    - set_value then becomes an assignment
+    - we should probably be freezing the value once assigned
+- [ ] make `cell.is_found` into `cell.__bool__`
+- [ ] use set symmetric_difference in `cell.__eq__`
+- [ ] check_ can be removed from methods when they're type-hinted as returning boolean
+- [ ] SudokuSolver should be abstract, solve_step should be abstractmethod
+- [ ] consider giving cell object awareness of it's coordinate
+    - if we do this we can iterate the cells and get the row/col without using enumerate
+    - we could also then maintain a list of found cells, this could offer a vast speed bost to the simple solver
+        - perhaps newly known, as these are the ones likely to change the next results
+- [ ] add validation method to the sudoku grid

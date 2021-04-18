@@ -10,25 +10,25 @@ class TestSudokuCell:
         (0, False),
         (-1, False),
     ))
-    def test_isPossible(self, testArgPoss, expectedResult):
+    def test_is_possible(self, testArgPoss, expectedResult):
         testCell = SudokuCell()
-        actualResult = testCell.isPossible(testArgPoss)
+        actualResult = testCell.is_possible(testArgPoss)
         assert actualResult == expectedResult
 
-    @pytest.mark.parametrize('testArgPossList, expectedPossibilities, expectedPossCount', (
+    @pytest.mark.parametrize('testArgPossList, expected_possibilities, expectedPossCount', (
         ([1], [2, 3, 4, 5, 6, 7, 8, 9], 8),
         ([1, 9], [2, 3, 4, 5, 6, 7, 8], 7),
         ([2, 3, 4, 5, 6, 7, 8, 9], None, 0),
         ([0], [1, 2, 3, 4, 5, 6, 7, 8, 9], 9),
         ([-1], [1, 2, 3, 4, 5, 6, 7, 8, 9], 9),
     ))
-    def test_removePosibility(self, testArgPossList, expectedPossibilities, expectedPossCount):
+    def test_remove_posibility(self, testArgPossList, expected_possibilities, expectedPossCount):
         testCell = SudokuCell()
         for testArgPoss in testArgPossList:
-            testCell.removePossibility(testArgPoss)
-        actualPossibilities = testCell.possibilities
+            testCell.remove_possibility(testArgPoss)
+        actual_possibilities = testCell.possibilities
         # TODO actualPossCount = testCell.possibilityCount
-        assert actualPossibilities == expectedPossibilities
+        assert actual_possibilities == expected_possibilities
         # TODO assert actualPossCount == expectedPossCount
 
     @pytest.mark.parametrize('testArgValue, expectedResult', (
@@ -37,9 +37,9 @@ class TestSudokuCell:
         (-1, False),
         (None, False),
     ))
-    def test_isFound(self, testArgValue, expectedResult):
+    def test_is_found(self, testArgValue, expectedResult):
         testCell = SudokuCell(testArgValue)
-        actualResult = testCell.isFound()
+        actualResult = testCell.is_found()
         assert actualResult == expectedResult
 
     @pytest.mark.parametrize('testArgValue, expectedResult', (
@@ -66,9 +66,9 @@ class TestSudokuCell:
     def test_eq(self, testArgValue1, testArgValue2, testArgPossList1, testArgPossList2, expectedResult):
         testCell1 = SudokuCell(testArgValue1)
         for testArgPoss in testArgPossList1:
-            testCell1.removePossibility(testArgPoss)
+            testCell1.remove_possibility(testArgPoss)
         testCell2 = SudokuCell(testArgValue2)
         for testArgPoss in testArgPossList2:
-            testCell2.removePossibility(testArgPoss)
+            testCell2.remove_possibility(testArgPoss)
         actualResult = testCell1 == testCell2
         assert actualResult == expectedResult

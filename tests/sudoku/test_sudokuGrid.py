@@ -10,12 +10,12 @@ class TestSudokuGrid:
         (0, False),
         (-1, False),
     ))
-    def _test_isPossible(self, testArgPoss, expectedResult):
+    def _test_is_possible(self, testArgPoss, expectedResult):
         testCell = sudokuCell.SudokuCell()
-        actualResult = testCell.isPossible(testArgPoss)
+        actualResult = testCell.is_possible(testArgPoss)
         assert actualResult == expectedResult
 
-    @pytest.mark.parametrize('testArgGrid, testArgR, testArgN, expectedPossibilities', (
+    @pytest.mark.parametrize('testArgGrid, testArgR, testArgN, expected_possibilities', (
         #([], True),
         #([[]], True),
         #([
@@ -26,11 +26,11 @@ class TestSudokuGrid:
         #], False),
         #(-1, None),
     ))
-    def test_rowRemovePossibility(self, testArgGrid, testArgR, testArgN, expectedPossibilities):
+    def test_row_remove_possibility(self, testArgGrid, testArgR, testArgN, expected_possibilities):
         testGrid = SudokuGrid(testArgGrid)
-        testGrid.rowRemovePossibility(testArgR, testArgN)
-        for expectedKey in expectedPossibilities:
-            expectedResult = expectedPossibilities[expectedKey]
+        testGrid.row_remove_possibility(testArgR, testArgN)
+        for expectedKey in expected_possibilities:
+            expectedResult = expected_possibilities[expectedKey]
             actualResult = testGrid.grid[0][expectedKey]
             assert actualResult == expectedResult
 
@@ -47,9 +47,9 @@ class TestSudokuGrid:
         ], False),
         #(-1, None),
     ))
-    def test_isComplete(self, testArgGrid, expectedResult):
+    def test_is_complete(self, testArgGrid, expectedResult):
         testGrid = SudokuGrid(testArgGrid)
-        actualResult = testGrid.isComplete()
+        actualResult = testGrid.is_complete()
         assert actualResult == expectedResult
 
     @pytest.mark.parametrize('testArgGrid1, testArgGrid2, expectedResult', (
