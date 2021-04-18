@@ -5,7 +5,7 @@ POETRY := poetry run
 lint:
 	$(POETRY) mypy src tests
 	$(POETRY) pylint src
-	#cd test && $(POETRY) pylint tests
+	cd tests && $(POETRY) pylint tests
 
 REPORT := term-missing:skip-covered
 test:
