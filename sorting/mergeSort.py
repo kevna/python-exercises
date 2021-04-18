@@ -3,13 +3,12 @@ import sorter
 class MergeSort(sorter.Sorter):
     def sort(self, items, cutoff = None):
         result = self._mergeSort(items)
-        for i in range(len(items)):
-            items[i] = result[i]
+        self._mutateList(items, result)
 
     def _mergeSort(self, items):
         if len(items) <= 1:
             return items
-        split = len(items) / 2
+        split = len(items) // 2
         leftList = self._mergeSort(items[:split])
         rightList = self._mergeSort(items[split:])
         return self._mergeLists(leftList, rightList)

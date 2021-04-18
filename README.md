@@ -2,6 +2,8 @@ Python Exercises
 ================
 A collection of programming exercises written in python for practice and to pass the time.
 
+This repo is being revamped by upgrading to python3 and introducing some additional development tools.
+
 ackermann
 ---------
 Ackermann's function is one of the earliest examples of a totally computable (μ-recursive) function that is not also a primitive recursive function. It is doubly-recursive and grows more quickly than even many multiple exponential functions. To read more about Ackermann's function [visit wolfram mathworld](http://mathworld.wolfram.com/AckermannFunction.html)
