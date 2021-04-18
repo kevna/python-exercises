@@ -1,6 +1,10 @@
 from sorting.sorter import Sorter
 
 class CocktailShakerSort(Sorter):
+    """Implementation of cocktail shaker sort.
+    This bubbles one item to either end on each pass.
+    Like bubble sort we shortcut out if no items needed to be swapped.
+    """
     def __init__(self):
         self.length = 0
 

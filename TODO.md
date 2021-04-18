@@ -11,6 +11,17 @@ life
     - compare_grids could be replaced with Grid.__xor__ by counting differences rather than matches
     - perhaps Game.__iter__ handles the step function by yielding the new game grid?
 
+sorting
+-------
+- [ ] sorter parent class should be abstract, sort should be abstract method
+- [ ] potentially more pythonic to return the sorted list rather than mutating the original
+    - since this can be done with a slice it may also impact the time comparison less
+- [ ] create hybrid implementations of qick and merge sorts
+    - hybrid algorithms switch to a more efficient algorithm for short lists
+    - [ ] use cutoff to switch alg and prevent stack overflow
+- [ ] consider looking at parallelising recursive sorts
+- [ ] consider pivot-picking for quick sort
+
 sudoku
 ------
 - [ ] make cell value a property

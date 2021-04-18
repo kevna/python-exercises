@@ -1,6 +1,9 @@
 from sorting.sorter import Sorter
 
 class MergeSort(Sorter):
+    """Implementation of merge sort.
+    Divide the list in half, sort each half and merge them in order.
+    """
     def sort(self, items, cutoff = None):
         result = self._merge_sort(items)
         self._mutate_list(items, result)

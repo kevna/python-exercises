@@ -1,6 +1,11 @@
 from sorting.sorter import Sorter
 
 class StupidSort(Sorter):
+    """Implementation of stupid sort, also known as gnome sort.
+    If the current pair are out of order swap them and move back one
+    otherwise step forward.
+    """
+
     def sort(self, items, cutoff = None):
         tel = 0
         i = 0
@@ -12,6 +17,8 @@ class StupidSort(Sorter):
                 if  i > 0:
                     i -= 1
             elif tel > 0:
+                # Once we've shuffled an item back into place this jumps forward
+                # to where we found the out-of order pair (we already checked in between)
                 i = tel - 1
                 tel = 0
             else:

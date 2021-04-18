@@ -1,6 +1,13 @@
 from sorting.sorter import Sorter
 
 class QuickSort(Sorter):
+    """Implementation of quick sort.
+    Pick a pivot, divide the list into lower and higher values and sort them
+    finally add them together with the pivot.
+
+    Pivot is picked naively using the middle item of the list which could belong
+    at one end of the list, reducing efficiency.
+    """
     def sort(self, items, cutoff = None):
         result = self._quick_sort(items)
         self._mutate_list(items, result)

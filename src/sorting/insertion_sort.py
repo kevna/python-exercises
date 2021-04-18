@@ -1,6 +1,9 @@
 from sorting.sorter import Sorter
 
 class InsertionSort(Sorter):
+    """Implementation of insertion sort.
+    Take each item and move it to where it belongs in the sorted list ahead of it.
+    """
     def sort(self, items, cutoff = None):
         temp = None
         for i in range(1, len(items)):
