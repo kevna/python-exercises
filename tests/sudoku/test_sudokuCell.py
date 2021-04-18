@@ -4,6 +4,7 @@ import pytest
 
 from sudoku.sudokuCell import SudokuCell
 
+
 class TestSudokuCell:
     @pytest.mark.parametrize('possibility, expected', (
         (1, True),
@@ -18,7 +19,7 @@ class TestSudokuCell:
     @pytest.mark.parametrize('possibilities, expected_possibilities', (
         ([1], [2, 3, 4, 5, 6, 7, 8, 9]),
         ([1, 9], [2, 3, 4, 5, 6, 7, 8]),
-        ([2, 3, 4, 5, 6, 7, 8, 9], None),
+        ([2, 3, 4, 5, 6, 7, 8, 9], []),
         ([0], [1, 2, 3, 4, 5, 6, 7, 8, 9]),
         ([-1], [1, 2, 3, 4, 5, 6, 7, 8, 9]),
     ))
@@ -52,7 +53,7 @@ class TestSudokuCell:
         assert actual == expected
 
     @pytest.mark.parametrize('value, expected', (
-        (1, '1'),
+        (1, '\x1b[94m1\x1b[0m'),
         (0, ' '),
         (None, ' '),
     ))

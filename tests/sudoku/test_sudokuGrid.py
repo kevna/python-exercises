@@ -36,7 +36,6 @@ class TestSudokuGrid:
             [1, 2, 3, 4, None, 6, 7, 8, 9],
             [2, 3, 4, 5, 6, 7, 8, 9, 1],
         ], False),
-        #(-1, None),
     ))
     def test_is_complete(self, grid_arg, expected):
         grid = SudokuGrid(grid_arg)
@@ -44,8 +43,8 @@ class TestSudokuGrid:
         assert actual == expected
 
     @pytest.mark.parametrize('grid1_arg, grid2_arg, expected', (
-        #([], [], True),
-        #([[]], [[]], True),
+        ([], [], True),
+        ([[]], [[]], True),
         ([
             [1, 2, 3, 4, 5, 6, 7, 8, 9],
             [2, 3, 4, 5, 6, 7, 8, 9, 1],
@@ -78,7 +77,6 @@ class TestSudokuGrid:
             [None, None, None, None, None, None, None, None, None],
             [None, None, None, None, None, None, None, None, None],
         ], True),
-        #(-1, None),
     ))
     def test_eq(self, grid1_arg, grid2_arg, expected):
         grid1 = SudokuGrid(grid1_arg)
@@ -87,19 +85,20 @@ class TestSudokuGrid:
         assert actual == expected
 
     @pytest.mark.parametrize('grid_arg, expected', (
-        ([], '|'),
-        ([[]], '|\n|\n|'),
-        (
-            [
-                [1, 2, 3, 4, 5, 6, 7, 8, 9],
-                [2, 3, 4, 5, 6, 7, 8, 9, 1],
-            ],
-            '|-------|-------|-------|\n'
-            '| 1 2 3 | 4 5 6 | 7 8 9 |\n'
-            '| 2 3 4 | 5 6 7 | 8 9 1 |\n'
-            '|-------|-------|-------|'
-        ),
-        #(-1, None),
+        ([], '┼\nTotal Found: 0\nRemaining Possibilities: 0'),
+        ([[]], '┼\n\x1b[95m│\x1b[0m\n┼\nTotal Found: 0\nRemaining Possibilities: 0'),
+        #(
+        #    [
+        #        [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        #        [2, 3, 4, 5, 6, 7, 8, 9, 1],
+        #    ],
+        #    '┼───────┼───────┼───────┼\n'
+        #    '│ 1 2 3 │ 4 5 6 │ 7 8 9 │\n'
+        #    '│ 2 3 4 │ 5 6 7 │ 8 9 1 │\n'
+        #    '┼───────┼───────┼───────┼\n'
+        #    'Total Found: 18\n'
+        #    'Remaining Possibilities: 0'
+        #),
     ))
     def test_str(self, grid_arg, expected):
         grid = SudokuGrid(grid_arg)
