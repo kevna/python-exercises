@@ -3,7 +3,7 @@
 from itertools import zip_longest
 from typing import Sequence, Optional, Iterator
 
-from sudoku.sudokuCell import SudokuCell
+from sudoku.cell import SudokuCell
 from sudoku.ColourText import Colours, colour
 
 

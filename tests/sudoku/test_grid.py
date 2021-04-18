@@ -2,29 +2,10 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-from sudoku.sudokuGrid import SudokuGrid
+from sudoku.grid import SudokuGrid
 
 
 class TestSudokuGrid:
-    @pytest.mark.parametrize('grid_arg, arg_row, arg_number, exp_possibilities', (
-        #([], True),
-        #([[]], True),
-        #([
-        #    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        #], True),
-        #([
-        #    [1, 2, 3, 4, None, 6, 7, 8, 9],
-        #], False),
-        #(-1, None),
-    ))
-    def test_row_remove_possibility(self, grid_arg, arg_row, arg_number, exp_possibilities):
-        grid = SudokuGrid(grid_arg)
-        grid.row_remove_possibility(arg_row, arg_number)
-        for exp_key in exp_possibilities:
-            expected = exp_possibilities[exp_key]
-            actual = grid.grid[0][exp_key]
-            assert actual == expected
-
     @pytest.mark.parametrize('grid_arg, expected', (
         ([], True),
         ([[]], True),

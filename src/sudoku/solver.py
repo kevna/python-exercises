@@ -1,6 +1,6 @@
 import argparse
 
-from sudoku.sudokuGrid import SudokuGrid
+from sudoku.grid import SudokuGrid
 
 
 class SolveFailedException(Exception):

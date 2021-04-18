@@ -1,4 +1,4 @@
-from sudoku.sudokuSolver import SudokuSolver
+from sudoku.solver import SudokuSolver
 
 
 class SudokuSolverSimple(SudokuSolver):

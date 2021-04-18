@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-from sudoku.sudokuCell import SudokuCell
+from sudoku.cell import SudokuCell
 
 
 class TestSudokuCell:
