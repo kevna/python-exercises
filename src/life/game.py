@@ -72,33 +72,3 @@ class Game:
         """Iterate the game to proceed through generations."""
         while self.has_activity():
             yield self.step()
-
-    def the_loop(self):
-        """Perform the game by iterating steps until activity ceases.
-        At each generation we clear the screen and display the current generation.
-        We sleep for 0.1 seconds between each generations.
-        """
-        for generation in self:
-            os.system('clear')
-            print(generation)
-            time.sleep(0.1)
-
-    @staticmethod
-    def main():
-        """Main method to allow basic terminal interaction
-        by specifying the grid size and handling ^C.
-        """
-        rows = 20
-        cols = 40
-        if len(sys.argv) == 3:
-            rows = int(sys.argv[1])
-            cols = int(sys.argv[2])
-        game_grid = GameOfLife(Generation.random(rows, cols))
-        try:
-            game_grid.the_loop()
-        except KeyboardInterrupt:
-            sys.exit(0)
-
-
-if __name__ == '__main__':
-    GameOfLife.main()
