@@ -13,8 +13,6 @@ class Generation:
 
     def __init__(self, grid: Grid):
         self._grid = grid
-        self.height = len(grid)
-        self.width = len(grid[0])
 
     @classmethod
     def random(cls, height: int, width: int) -> 'Generation':
@@ -29,7 +27,10 @@ class Generation:
 
     def alive(self, row: int, col: int) -> bool:
         """Test whether a cell is alive."""
-        return self._grid[row][col]
+        try:
+            return self._grid[row][col]
+        except IndexError:
+            return False
 
     def living_neighbours(self, row: int, col: int) -> int:
         """Test whether a cell should survive from the previous generation into a new one.
@@ -38,14 +39,12 @@ class Generation:
         """
         live_neighbours = 0
         for i in range(-1, 2):
-            row_pos = row + i
-            if 0 <= row_pos < self.height:
-                width = len(self._grid[row_pos])
-                for j in range(-1, 2):
-                    col_pos = col + j
-                    if 0 <= col_pos < width and self._grid[row_pos][col_pos]:
-                        live_neighbours += 1
-        if self._grid[row][col]:
+            for j in range(-1, 2):
+                row_pos = row + i
+                col_pos = col + j
+                if row_pos >= 0 and col_pos >= 0 and self.alive(row_pos, col_pos):
+                    live_neighbours += 1
+        if self.alive(row, col):
             live_neighbours -= 1
         return live_neighbours
 
@@ -59,6 +58,19 @@ class Generation:
                 if our_cell != their_cell:
                     differences += 1
         return differences
+
+    def __eq__(self, other: object) -> bool:
+        """Test exact equality between generation grids.
+        The loops are identical to xor but we can skip out at the first difference.
+        This offers far better average performance for large grids (worst case is the same).
+        """
+        if not isinstance(other, Generation):
+            return False
+        for our_row, their_row in zip_longest(self._grid, other._grid, fillvalue=[]):
+            for our_cell, their_cell in zip_longest(our_row, their_row):
+                if our_cell != their_cell:
+                    return False
+        return True
 
     def __str__(self):
         """Render the current generations as a contiguous text block."""

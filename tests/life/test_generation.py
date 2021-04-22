@@ -7,11 +7,11 @@ from life.generation import Generation
 
 class TestGeneration:
     @pytest.mark.parametrize('height, width, exp_rows, exp_cols', (
-        #(0, 0, 0, 0),
+        (0, 0, 0, 0),
         (1, 0, 1, 0),
         (10, 10, 10, 10),
         (50, 100, 50, 100),
-        #(-1, -10, 0, 0),
+        (-1, -10, 0, 0),
     ))
     def test_random_grid(self, height, width, exp_rows, exp_cols):
         gen = Generation.random(height, width)
@@ -67,42 +67,97 @@ class TestGeneration:
             0, -1,
             1,
         ),
+        (
+            [
+                [False],
+            ],
+            0, 0,
+            0,
+        ),
+        (
+            [
+                [False],
+            ],
+            1, 1,
+            0,
+        ),
     ))
     def test_living_neighbours(self, grid, row, col, expected):
         gen = Generation(grid)
         actual = gen.living_neighbours(row, col)
         assert actual == expected
 
-    @pytest.mark.parametrize('grid1, grid2, expected', (
+    @pytest.mark.parametrize('gen1, gen2, expected', (
         (
-            [
+            Generation([
                 [False, True , False],
                 [False, True , False],
                 [False, True , False],
-            ],
-            [
+            ]),
+            Generation([
                 [False, True , False],
                 [False, True , False],
                 [False, True , False],
-            ],
+            ]),
             0,
         ),
         (
-            [
+            Generation([
                 [False, True , False],
                 [False, True , False],
                 [False, True , False],
-            ],
-            [
+            ]),
+            Generation([
                 [False, False, False],
                 [True , True , True ],
                 [False, False, False],
-            ],
+            ]),
             4,
         ),
     ))
-    def test_xor(self, grid1, grid2, expected):
-        actual = Generation(grid1) ^ Generation(grid2)
+    def test_xor(self, gen1, gen2, expected):
+        actual = gen1 ^ gen2
+        assert actual == expected
+
+    @pytest.mark.parametrize('gen1, gen2, expected', (
+        (
+            Generation([
+                [False, True , False],
+                [False, True , False],
+                [False, True , False],
+            ]),
+            Generation([
+                [False, True , False],
+                [False, True , False],
+                [False, True , False],
+            ]),
+            True,
+        ),
+        (
+            Generation([
+                [False, True , False],
+                [False, True , False],
+                [False, True , False],
+            ]),
+            Generation([
+                [False, False, False],
+                [True , True , True ],
+                [False, False, False],
+            ]),
+            False,
+        ),
+        (
+            Generation([
+                [False, True , False],
+                [False, True , False],
+                [False, True , False],
+            ]),
+            object(),
+            False,
+        ),
+    ))
+    def test_eq(self, gen1, gen2, expected):
+        actual = gen1 == gen2
         assert actual == expected
 
     @pytest.mark.parametrize('grid, expected', (
