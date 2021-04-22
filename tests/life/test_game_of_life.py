@@ -1,43 +1,62 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
+from unittest.mock import Mock
+
 import pytest
 
+from life.generation import Generation
 from life.game_of_life import GameOfLife
 
-
 class TestGameOfLife:
-    @pytest.mark.parametrize('grid_arg, row, col, expected', (
-        ([
-            [False, True , False],
-            [False, True , False],
-            [False, True , False],
-        ], 1, 0, True),
-        ([
-            [False, False, False],
-            [True , True , True ],
-            [False, False, False],
-        ], 0, 1, True),
-        ([
-            [False, False, False, False],
-            [False, True , True , False],
-            [False, True , True , False],
-            [False, False, False, False],
-        ], 1, 0, False),
-        ([
-            [False, False, False, False],
-            [False, True , True , False],
-            [False, True , True , False],
-            [False, False, False, False],
-        ], 1, 1, True),
-        ([
-            [False, False, False],
-            [True , True , True ],
-            [False, False, False],
-        ], 0, -1, False),
+    tiny_false = Generation([[False]])
+    tiny_true = Generation([[True]])
+
+    @pytest.mark.parametrize('history, expected', (
+        ([], True),
+        ([tiny_false], True),
+        ([tiny_true]*10, False),
+        ([tiny_false]*10, True),
     ))
-    def test_cell_lives(self, grid_arg, row, col, expected):
-        grid = GameOfLife(grid_arg)
-        actual = grid.cell_lives(row, col)
+    def test_has_activity(self, history, expected):
+        grid = GameOfLife(self.tiny_true)
+        grid.history = history[:]
+        actual = grid.has_activity()
+        assert actual == expected
+
+    @pytest.mark.parametrize('prehistory, generation, expected', (
+        (
+            [],
+            tiny_false,
+            [tiny_false],
+        ),
+        (
+            [tiny_false]*10,
+            tiny_true,
+            [tiny_false]*9 + [tiny_true],
+        ),
+    ))
+    def test_store_generation(self, prehistory, generation, expected):
+        grid = GameOfLife(Generation([[]]))
+        grid.history = prehistory[:]
+        grid.store_generation(generation)
+        assert grid.history == expected
+
+    @pytest.mark.parametrize('alive, neighbours, expected', (
+        (False, 2, False),
+        (False, 3, True),
+        (False, 4, False),
+        (True, 1, False),
+        (True, 2, True),
+        (True, 3, True),
+        (True, 4, False),
+    ))
+    def test_cell_lives(self, alive, neighbours, expected):
+        mock_gen = Mock(spec=Generation)
+        mock_gen._grid = [[]]
+        mock_gen.alive.return_value = alive
+        mock_gen.living_neighbours.return_value = neighbours
+        grid = GameOfLife(mock_gen)
+        actual = grid.cell_lives(0, 0)
         assert actual == expected
 
     @pytest.mark.parametrize('grid_arg, expected', (
@@ -69,59 +88,7 @@ class TestGameOfLife:
         ),
     ))
     def test_step(self, grid_arg, expected):
-        grid = GameOfLife(grid_arg)
-        grid.step()
-        actual = grid.grid
-        assert actual == expected
-
-    @pytest.mark.parametrize('grid_arg, expected', (
-        (
-            [
-                [False, True , False],
-                [False, True , False],
-                [False, True , False],
-            ],
-            ' 0 \n'
-            ' 0 \n'
-            ' 0 ',
-        ),
-        (
-            [
-                [False, False, False],
-                [True , True , True ],
-                [False, False, False],
-            ],
-            '   \n'
-            '000\n'
-            '   ',
-        ),
-        (
-            [
-                [False, False, False, False],
-                [False, True , True , False],
-                [False, True , True , False],
-                [False, False, False, False],
-            ],
-            '    \n'
-            ' 00 \n'
-            ' 00 \n'
-            '    ',
-        ),
-    ))
-    def test_str(self, grid_arg, expected):
-        grid = GameOfLife(grid_arg)
-        actual = str(grid)
-        assert actual == expected
-
-    @pytest.mark.parametrize('rows, cols, exp_rows, exp_cols', (
-        (0, 0, 0, 0),
-        (1, 0, 1, 0),
-        (10, 10, 10, 10),
-        (50, 100, 50, 100),
-        (-1, -10, 0, 0),
-    ))
-    def test_random_grid(self, rows, cols, exp_rows, exp_cols):
-        grid = GameOfLife.random_grid(rows, cols)
-        assert len(grid) == exp_rows
-        for row in grid:
-            assert len(row) == exp_cols
+        grid = GameOfLife(Generation(grid_arg))
+        actual = grid.step()
+        assert actual == Generation(expected)
+        assert actual == grid.current_gen
