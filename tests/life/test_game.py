@@ -5,9 +5,9 @@ from unittest.mock import Mock
 import pytest
 
 from life.generation import Generation
-from life.game_of_life import GameOfLife
+from life.game import Game
 
-class TestGameOfLife:
+class TestGame:
     tiny_false = Generation([[False]])
     tiny_true = Generation([[True]])
 
@@ -18,7 +18,7 @@ class TestGameOfLife:
         ([tiny_false]*10, True),
     ))
     def test_has_activity(self, history, expected):
-        grid = GameOfLife(self.tiny_true)
+        grid = Game(self.tiny_true)
         grid.history = history[:]
         actual = grid.has_activity()
         assert actual == expected
@@ -36,7 +36,7 @@ class TestGameOfLife:
         ),
     ))
     def test_store_generation(self, prehistory, generation, expected):
-        grid = GameOfLife(Generation([[]]))
+        grid = Game(Generation([[]]))
         grid.history = prehistory[:]
         grid.store_generation(generation)
         assert grid.history == expected
@@ -55,7 +55,7 @@ class TestGameOfLife:
         mock_gen._grid = [[]]
         mock_gen.alive.return_value = alive
         mock_gen.living_neighbours.return_value = neighbours
-        grid = GameOfLife(mock_gen)
+        grid = Game(mock_gen)
         actual = grid.cell_lives(0, 0)
         assert actual == expected
 
@@ -88,7 +88,7 @@ class TestGameOfLife:
         ),
     ))
     def test_step(self, grid_arg, expected):
-        grid = GameOfLife(Generation(grid_arg))
+        grid = Game(Generation(grid_arg))
         actual = grid.step()
         assert actual == Generation(expected)
         assert actual == grid.current_gen

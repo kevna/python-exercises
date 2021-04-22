@@ -7,7 +7,7 @@ import time
 from life.generation import Generation
 
 
-class GameOfLife:
+class Game:
     """Simulation of John Conways game of life."""
     GENERATIONSTOKEEP = 10
 
