@@ -5,17 +5,19 @@ import os
 import time
 
 from life.generation import Generation
+from life.rule import Rule
 
 
 class Game:
     """Simulation of John Conways game of life."""
     GENERATIONSTOKEEP = 10
 
-    def __init__(self, gen: Generation):
+    def __init__(self, gen: Generation, rule: Rule):
         self.current_gen = gen
         self.height = len(gen._grid)
         self.width = len(gen._grid[0])
         self.history: list[Generation] = []
+        self.rule = rule
 
     def has_activity(self):
         """Hueristically estimate if the life cycle of the game grid
@@ -47,11 +49,12 @@ class Game:
         This is done by counting the 8 (orthogonal and diagonal) neighbouring cells
         and then applying the classic game of life rules: B3/S23.
         """
+        surviving = self.current_gen.alive(row, col)
         live_neighbours = self.current_gen.living_neighbours(row, col)
-        live_cell = False
-        if live_neighbours == 3 or (self.current_gen.alive(row, col) and live_neighbours == 2):
-            live_cell = True
-        return live_cell
+        if (surviving and live_neighbours in self.rule.survival) \
+                or (not surviving and live_neighbours in self.rule.birth):
+            return True
+        return False
 
     def step(self):
         """Progress a single generation in the game of life.

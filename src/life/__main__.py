@@ -5,11 +5,13 @@ from argparse import ArgumentParser
 
 from life.generation import Generation
 from life.game import Game
+from life.rule import DEFAULT_RULE, Rule
 
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument('width', nargs='?', default=40, type=int)
     parser.add_argument('height', nargs='?', default=20, type=int)
+    parser.add_argument('--rules', default=DEFAULT_RULE, type=Rule)
     return parser.parse_args()
 
 def core_loop(game: Game):
@@ -30,7 +32,7 @@ def main():
     by specifying the grid size and handling ^C.
     """
     config = parse_args()
-    game = Game(Generation.random(config.height, config.width))
+    game = Game(Generation.random(config.height, config.width), config.rules)
     core_loop(game)
 
 

@@ -6,6 +6,11 @@ import pytest
 
 from life.generation import Generation
 from life.game import Game
+from life.rule import DEFAULT_RULE, Rule
+
+@pytest.fixture
+def rule():
+    return Rule(DEFAULT_RULE)
 
 class TestGame:
     tiny_false = Generation([[False]])
@@ -17,8 +22,8 @@ class TestGame:
         ([tiny_true]*10, False),
         ([tiny_false]*10, True),
     ))
-    def test_has_activity(self, history, expected):
-        grid = Game(self.tiny_true)
+    def test_has_activity(self, history, expected, rule):
+        grid = Game(self.tiny_true, rule)
         grid.history = history[:]
         actual = grid.has_activity()
         assert actual == expected
@@ -35,27 +40,31 @@ class TestGame:
             [tiny_false]*9 + [tiny_true],
         ),
     ))
-    def test_store_generation(self, prehistory, generation, expected):
-        grid = Game(Generation([[]]))
+    def test_store_generation(self, prehistory, generation, expected, rule):
+        grid = Game(Generation([[]]), rule)
         grid.history = prehistory[:]
         grid.store_generation(generation)
         assert grid.history == expected
 
-    @pytest.mark.parametrize('alive, neighbours, expected', (
-        (False, 2, False),
-        (False, 3, True),
-        (False, 4, False),
-        (True, 1, False),
-        (True, 2, True),
-        (True, 3, True),
-        (True, 4, False),
+    @pytest.mark.parametrize('rule, alive, neighbours, expected', (
+        (DEFAULT_RULE, False, 2, False),
+        (DEFAULT_RULE, False, 3, True),
+        (DEFAULT_RULE, False, 4, False),
+        (DEFAULT_RULE, True, 1, False),
+        (DEFAULT_RULE, True, 2, True),
+        (DEFAULT_RULE, True, 3, True),
+        (DEFAULT_RULE, True, 4, False),
+        ('B2', False, 2, True),
+        ('B2', False, 3, False),
+        ('B2', True, 2, False),
+        ('B2', True, 3, False),
     ))
-    def test_cell_lives(self, alive, neighbours, expected):
+    def test_cell_lives(self, rule, alive, neighbours, expected):
         mock_gen = Mock(spec=Generation)
         mock_gen._grid = [[]]
         mock_gen.alive.return_value = alive
         mock_gen.living_neighbours.return_value = neighbours
-        grid = Game(mock_gen)
+        grid = Game(mock_gen, Rule(rule))
         actual = grid.cell_lives(0, 0)
         assert actual == expected
 
@@ -87,8 +96,8 @@ class TestGame:
             )
         ),
     ))
-    def test_step(self, grid_arg, expected):
-        grid = Game(Generation(grid_arg))
+    def test_step(self, grid_arg, expected, rule):
+        grid = Game(Generation(grid_arg), rule)
         actual = grid.step()
         assert actual == Generation(expected)
         assert actual == grid.current_gen
