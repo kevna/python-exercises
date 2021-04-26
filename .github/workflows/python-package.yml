@@ -37,4 +37,4 @@ jobs:
     - name: Lint with pylint and mypy
       run: make lint threshold=9.5
     - name: Test with pytest
-      run: make test
+      run: make tests

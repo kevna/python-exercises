@@ -1,6 +1,9 @@
 POETRY := poetry run
 
-.PHONY: test
+.PHONY: lint FORCE
+
+src/%.py src/%: FORCE
+	$(POETRY) python -m $(subst /,.,$*)
 
 ifdef threshold
 THRESHOLD := --fail-under=$(threshold)
@@ -11,5 +14,10 @@ lint:
 	cd tests && $(POETRY) pylint $(THRESHOLD) tests
 
 REPORT := term-missing:skip-covered
-test:
+tests: FORCE
 	$(POETRY) pytest --cov=src --cov-report=$(REPORT)
+
+tests/%: FORCE
+	$(POETRY) pytest $@ --cov=src/$* --cov-report=$(REPORT)
+
+FORCE: ;
