@@ -10,7 +10,7 @@ life
     - this would make it easier to enforce grids being immutable
     - compare_grids could be replaced with Grid.__xor__ by counting differences rather than matches
     - perhaps Game.__iter__ handles the step function by yielding the new game grid?
-- [ ] move parseargs and the cli app loop to `__main__`
+- [X] move parseargs and the cli app loop to `__main__`
 - [ ] accept rule strings
 
 sorting
