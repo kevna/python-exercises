@@ -41,7 +41,7 @@ class TestGame:
         ),
     ))
     def test_store_generation(self, prehistory, generation, expected, rule):
-        grid = Game(Generation([[]]), rule)
+        grid = Game(self.tiny_true, rule)
         grid.history = prehistory[:]
         grid.store_generation(generation)
         assert grid.history == expected
@@ -61,7 +61,7 @@ class TestGame:
     ))
     def test_cell_lives(self, rule, alive, neighbours, expected):
         mock_gen = Mock(spec=Generation)
-        mock_gen._grid = [[]]
+        mock_gen._grid = [[False]]
         mock_gen.alive.return_value = alive
         mock_gen.living_neighbours.return_value = neighbours
         grid = Game(mock_gen, Rule(rule))
@@ -101,3 +101,4 @@ class TestGame:
         actual = grid.step()
         assert actual == Generation(expected)
         assert actual == grid.current_gen
+        assert grid.generations == 1

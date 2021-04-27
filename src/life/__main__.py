@@ -1,6 +1,5 @@
 from os import system
 from time import sleep
-import sys
 from argparse import ArgumentParser
 
 from life.generation import Generation
@@ -11,7 +10,7 @@ def parse_args():
     parser = ArgumentParser()
     parser.add_argument('width', nargs='?', default=40, type=int)
     parser.add_argument('height', nargs='?', default=20, type=int)
-    parser.add_argument('--rules', default=DEFAULT_RULE, type=Rule)
+    parser.add_argument('-r', '--rules', default=DEFAULT_RULE, type=Rule)
     return parser.parse_args()
 
 def core_loop(game: Game):
@@ -26,6 +25,7 @@ def core_loop(game: Game):
             sleep(0.1)
     except KeyboardInterrupt:
         pass
+    print(f'game ended at generation {game.generations}')
 
 def main():
     """Main method to allow basic terminal interaction

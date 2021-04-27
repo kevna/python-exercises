@@ -1,8 +1,6 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-import sys
-import os
-import time
+from math import log
 
 from life.generation import Generation
 from life.rule import Rule
@@ -16,7 +14,9 @@ class Game:
         self.current_gen = gen
         self.height = len(gen._grid)
         self.width = len(gen._grid[0])
+        self.end_threshold = log(self.height*self.width)
         self.history: list[Generation] = []
+        self.generations = 0
         self.rule = rule
 
     def has_activity(self):
@@ -34,7 +34,7 @@ class Game:
         for generation in self.history:
             generational_average += self.current_gen ^ generation
         generational_average /= len(self.history)
-        return generational_average > (0.01*self.height*self.width)
+        return generational_average > self.end_threshold
 
     def store_generation(self, generation):
         """Add the current grid generation to the generation store.
@@ -69,6 +69,7 @@ class Game:
                 new_row.append(self.cell_lives(row, col))
             new_grid.append(new_row)
         self.current_gen = Generation(new_grid)
+        self.generations += 1
         return self.current_gen
 
     def __iter__(self):
