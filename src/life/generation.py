@@ -75,11 +75,15 @@ class Generation:
     def __str__(self):
         """Render the current generations as a contiguous text block."""
         result = []
-        for row in self._grid:
+        for upper, lower in zip_longest(self._grid[::2], self._grid[1::2], fillvalue=[]):
             line = []
-            for cell in row:
-                if cell:
-                    line.append('0') #'\xe2\x96\x88')
+            for upper_cell, lower_cell in zip_longest(upper, lower, fillvalue=False):
+                if upper_cell and lower_cell:
+                    line.append('█')
+                elif upper_cell:
+                    line.append('▀')
+                elif lower_cell:
+                    line.append('▄')
                 else:
                     line.append(' ')
             result.append(''.join(line))

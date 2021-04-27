@@ -167,9 +167,8 @@ class TestGeneration:
                 [False, True , False],
                 [False, True , False],
             ],
-            ' 0 \n'
-            ' 0 \n'
-            ' 0 ',
+            ' █ \n'
+            ' ▀ ',
         ),
         (
             [
@@ -177,9 +176,15 @@ class TestGeneration:
                 [True , True , True ],
                 [False, False, False],
             ],
-            '   \n'
-            '000\n'
+            '▄▄▄\n'
             '   ',
+        ),
+        (
+            [
+                [True, True],
+                [True, True],
+            ],
+            '██',
         ),
         (
             [
@@ -188,10 +193,8 @@ class TestGeneration:
                 [False, True , True , False],
                 [False, False, False, False],
             ],
-            '    \n'
-            ' 00 \n'
-            ' 00 \n'
-            '    ',
+            ' ▄▄ \n'
+            ' ▀▀ ',
         ),
     ))
     def test_str(self, grid, expected):
