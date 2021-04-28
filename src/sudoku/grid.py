@@ -62,7 +62,7 @@ class SudokuGrid:
         box_col = (cell_col // self.BOX_WIDTH) * self.BOX_WIDTH
         return box_row, box_col
 
-    def check_row_complete(self, r: int) -> bool:
+    def row_complete(self, r: int) -> bool:
         """Check if an entire row has been completed."""
         if r in self._complete_rows:
             return True
@@ -75,7 +75,7 @@ class SudokuGrid:
             result = True
         return result
 
-    def check_col_complete(self, c: int) -> bool:
+    def col_complete(self, c: int) -> bool:
         """Check if an entire col has been completed."""
         if c in self._complete_cols:
             return True
@@ -88,7 +88,7 @@ class SudokuGrid:
             result = True
         return result
 
-    def check_box_complete(self, cell_row: int, cell_col: int) -> bool:
+    def box_complete(self, cell_row: int, cell_col: int) -> bool:
         """Check if an entire sub box has been completed."""
         box_row, box_col = self.get_box_coords(cell_row, cell_col)
         if (box_row, box_col) in self._complete_boxes:
@@ -100,18 +100,18 @@ class SudokuGrid:
         self._complete_boxes.append((box_row, box_col))
         return True
 
-    def check_cell_complete(self, r: int, c: int) -> bool:
+    def cell_complete(self, r: int, c: int) -> bool:
         """Check if a cell is in a completed row/box/cell."""
         return (
-            self.check_row_complete(r)
-            or self.check_col_complete(c)
-            or self.check_box_complete(r, c)
+            self.row_complete(r)
+            or self.col_complete(c)
+            or self.box_complete(r, c)
         )
 
     def is_complete(self) -> bool:
         """Check if the entire grid has been completed."""
         for row in range(len(self._grid)):
-            if not self.check_row_complete(row):
+            if not self.row_complete(row):
                 return False
         return True
 
@@ -131,7 +131,7 @@ class SudokuGrid:
             if col % self.BOX_WIDTH == 0:
                 row.append(self.LINECROS)
             line = self.LINEHORI
-            if self.check_col_complete(col):
+            if self.col_complete(col):
                 line = colour(line, self.COMPLETEDCOLOURLINE)
             row.append(line)
         row.append(self.LINECROS)
@@ -147,7 +147,7 @@ class SudokuGrid:
             if r % self.BOX_HEIGHT == 0:
                 result.append(self.row_separator(width))
             line = self.LINEVERT
-            if self.check_row_complete(r):
+            if self.row_complete(r):
                 line = colour(line, self.COMPLETEDCOLOURLINE)
             row_text = []
             for c, cell in enumerate(row):
@@ -158,7 +158,7 @@ class SudokuGrid:
                     found_count += 1
                 else:
                     possibility_count += len(cell)
-                if self.check_cell_complete(r, c):
+                if self.cell_complete(r, c):
                     cell_text = colour(cell_text, self.COMPLETEDCOLOURCELL)
                 row_text.append(cell_text)
             row_text.append(line)

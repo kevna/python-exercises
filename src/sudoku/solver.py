@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 import argparse
 
 from sudoku.grid import SudokuGrid
@@ -6,7 +7,7 @@ from sudoku.grid import SudokuGrid
 class SolveFailedException(Exception):
     """Exception for failing to solve the sudoku."""
 
-class SudokuSolver:
+class SudokuSolver(ABC):
     """Abstract class to provide a framework for implementing sudoku solver algorithms."""
 
     STEPFAILLIMIT = 9
@@ -16,6 +17,7 @@ class SudokuSolver:
         self.fail_limit = fail_limit
         self.failed_steps = 0
 
+    @abstractmethod
     def solve_step(self) -> int:
         """Perform a single step of solving the sudoku.
         This is intended to be overridden by subclasses to implement

@@ -75,15 +75,15 @@ class TestSudokuGrid:
             False,
         ),
     ))
-    def test_check_row_complete(self, row, expected):
+    def test_row_complete(self, row, expected):
         grid = SudokuGrid([row])
-        actual = grid.check_row_complete(0)
+        actual = grid.row_complete(0)
         assert actual is expected
 
-    def test_check_row_complete_stored(self):
+    def test_row_complete_stored(self):
         grid = SudokuGrid([[None]])
         grid._complete_rows = [0]
-        actual = grid.check_row_complete(0)
+        actual = grid.row_complete(0)
         assert actual is True
 
     @pytest.mark.parametrize('col, expected', (
@@ -97,15 +97,15 @@ class TestSudokuGrid:
             False,
         ),
     ))
-    def test_check_col_complete(self, col, expected):
+    def test_col_complete(self, col, expected):
         grid = SudokuGrid([[row] for row in col])
-        actual = grid.check_col_complete(0)
+        actual = grid.col_complete(0)
         assert actual is expected
 
-    def test_check_col_complete_stored(self):
+    def test_col_complete_stored(self):
         grid = SudokuGrid([[None]])
         grid._complete_cols = [0]
-        actual = grid.check_col_complete(0)
+        actual = grid.col_complete(0)
         assert actual is True
 
     @pytest.mark.parametrize('box, expected', (
@@ -126,15 +126,15 @@ class TestSudokuGrid:
             False,
         ),
     ))
-    def test_check_box_complete(self, box, expected):
+    def test_box_complete(self, box, expected):
         grid = SudokuGrid(box)
-        actual = grid.check_box_complete(0, 0)
+        actual = grid.box_complete(0, 0)
         assert actual is expected
 
-    def test_check_box_complete_stored(self):
+    def test_box_complete_stored(self):
         grid = SudokuGrid([[None]])
         grid._complete_boxes = [(0, 0)]
-        actual = grid.check_box_complete(0, 0)
+        actual = grid.box_complete(0, 0)
         assert actual is True
 
     @pytest.mark.parametrize('box, expected', (
@@ -177,9 +177,9 @@ class TestSudokuGrid:
             False,
         ),
     ))
-    def test_check_cell_complete(self, box, expected):
+    def test_cell_complete(self, box, expected):
         grid = SudokuGrid(box)
-        actual = grid.check_cell_complete(0, 0)
+        actual = grid.cell_complete(0, 0)
         assert actual is expected
 
     @pytest.mark.parametrize('grid_arg, expected', (

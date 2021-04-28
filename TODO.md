@@ -57,8 +57,8 @@ sudoku
     - we should probably be freezing the value once assigned
 - [X] make `cell.is_found` into `cell.__bool__`
 - [X] use set symmetric_difference in `cell.__eq__`
-- [ ] check_ can be removed from methods when they're type-hinted as returning boolean
-- [ ] SudokuSolver should be abstract, solve_step should be abstractmethod
+- [X] check_ can be removed from methods when they're type-hinted as returning boolean
+- [X] SudokuSolver should be abstract, solve_step should be abstractmethod
 - [ ] consider giving cell object awareness of it's coordinate
     - if we do this we can iterate the cells and get the row/col without using enumerate
     - we could also then maintain a list of found cells, this could offer a vast speed bost to the simple solver
