@@ -12,9 +12,9 @@ class SudokuSolver(ABC):
 
     STEPFAILLIMIT = 9
 
-    def __init__(self, filename: str, fail_limit: int = STEPFAILLIMIT):
+    def __init__(self, filename: str, fail_limit: int = None):
         self.grid = SudokuGrid.load_file(filename)
-        self.fail_limit = fail_limit
+        self.fail_limit = fail_limit or self.STEPFAILLIMIT
         self.failed_steps = 0
 
     @abstractmethod
