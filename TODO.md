@@ -52,7 +52,7 @@ sorting
 
 sudoku
 ------
-- [ ] make cell value a property
+- [X] make cell value a property
     - set_value then becomes an assignment
     - we should probably be freezing the value once assigned
 - [ ] make `cell.is_found` into `cell.__bool__`

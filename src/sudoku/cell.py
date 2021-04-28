@@ -10,19 +10,26 @@ class SudokuCell:
     ORIGINALCOLOUR = Colours.BLUE
 
     def __init__(self, value: Optional[int] = None):
+        self.possibilities: list[int] = list(self.ALLPOSSIBILITIES)
         if value in self.ALLPOSSIBILITIES:
-            self.set_value(value)
+            self.value = value
             self.original = True
         else:
-            self.value: Optional[int] = None
-            self.possibilities: list[int] = list(self.ALLPOSSIBILITIES)
+            self._value: Optional[int] = None
             self.original = False
 
-    def set_value(self, value: int):
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value: int):
         """Setter for value.
         This blanks possibilites since the value is now set.
         """
-        self.value = value
+        if value not in self.possibilities:
+            raise ValueError('Value {value} is not possible for cell')
+        self._value = value
         self.possibilities = []
 
     def is_possible(self, possibility: int) -> bool:
@@ -30,7 +37,7 @@ class SudokuCell:
         result = False
         if not self.is_found():
             result = possibility in self.possibilities
-        elif possibility == self.value:
+        elif possibility == self._value:
             result = True
         return result
 
@@ -43,12 +50,12 @@ class SudokuCell:
             return False
         self.possibilities.remove(possibility)
         if len(self.possibilities) <= 1:
-            self.set_value(self.possibilities[0])
+            self.value = self.possibilities[0]
         return True
 
     def is_found(self) -> bool:
         """Test if the cell's value has been found."""
-        return self.value is not None
+        return self._value is not None
 
     def __len__(self) -> int:
         if self.is_found():
@@ -59,7 +66,7 @@ class SudokuCell:
 
     def __repr__(self) -> str:
         if self.is_found():
-            result = f'{self.value}'
+            result = f'{self._value}'
         else:
             result = f'{self.possibilities}'
         return result
@@ -67,7 +74,7 @@ class SudokuCell:
     def __str__(self) -> str:
         result = ' '
         if self.is_found():
-            result = f'{self.value}'
+            result = f'{self._value}'
             if self.original:
                 result = colour(result, self.ORIGINALCOLOUR)
         return result
@@ -76,7 +83,7 @@ class SudokuCell:
         if not isinstance(other, SudokuCell):
             return False
         result = False
-        if self.value == other.value:
+        if self._value == other._value:
             result = True
             if not self.is_found():
                 for i in self.possibilities:

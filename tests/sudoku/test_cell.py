@@ -9,9 +9,20 @@ class TestSudokuCell:
     @pytest.mark.parametrize('value', (1, 9))
     def test_set_value(self, value):
         cell = SudokuCell()
-        cell.set_value(value)
+        cell.value = value
         assert cell.value == value
         assert cell.possibilities == []
+
+    @pytest.mark.parametrize('value', (0, 10, None))
+    def test_set_value_validation(self, value):
+        cell = SudokuCell()
+        with pytest.raises(ValueError):
+            cell.value = value
+
+    def test_set_value_reset(self):
+        cell = SudokuCell(4)
+        with pytest.raises(ValueError):
+            cell.value = 2
 
     @pytest.mark.parametrize('value, possibility, expected', (
         (5, 5, True),
@@ -89,7 +100,10 @@ class TestSudokuCell:
     ))
     def test_str_found(self, value, expected):
         cell = SudokuCell()
-        cell.set_value(value)
+        try:
+            cell.value = value
+        except ValueError:
+            pass
         actual = str(cell)
         assert actual == expected
 
