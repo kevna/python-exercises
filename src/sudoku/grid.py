@@ -68,7 +68,7 @@ class SudokuGrid:
             return True
         result = False
         for cell in self._grid[r]:
-            if not cell.is_found():
+            if not cell:
                 break
         else:
             self._complete_rows.append(r)
@@ -81,7 +81,7 @@ class SudokuGrid:
             return True
         result = False
         for row in self._grid:
-            if not row[c].is_found():
+            if not row[c]:
                 break
         else:
             self._complete_cols.append(c)
@@ -95,7 +95,7 @@ class SudokuGrid:
             return True
         for row in range(box_row, box_row + self.BOX_HEIGHT):
             for col in range(box_col, box_col + self.BOX_WIDTH):
-                if not self._grid[row][col].is_found():
+                if not self._grid[row][col]:
                     return False
         self._complete_boxes.append((box_row, box_col))
         return True
@@ -154,7 +154,7 @@ class SudokuGrid:
                 if c % self.BOX_WIDTH == 0:
                     row_text.append(line)
                 cell_text = str(cell)
-                if cell.is_found():
+                if cell:
                     found_count += 1
                 else:
                     possibility_count += len(cell)

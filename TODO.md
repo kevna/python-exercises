@@ -55,8 +55,8 @@ sudoku
 - [X] make cell value a property
     - set_value then becomes an assignment
     - we should probably be freezing the value once assigned
-- [ ] make `cell.is_found` into `cell.__bool__`
-- [ ] use set symmetric_difference in `cell.__eq__`
+- [X] make `cell.is_found` into `cell.__bool__`
+- [X] use set symmetric_difference in `cell.__eq__`
 - [ ] check_ can be removed from methods when they're type-hinted as returning boolean
 - [ ] SudokuSolver should be abstract, solve_step should be abstractmethod
 - [ ] consider giving cell object awareness of it's coordinate

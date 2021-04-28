@@ -56,9 +56,9 @@ class TestSudokuCell:
         (-1, False),
         (None, False),
     ))
-    def test_is_found(self, value, expected):
+    def test_bool(self, value, expected):
         cell = SudokuCell(value)
-        actual = cell.is_found()
+        actual = bool(cell)
         assert actual == expected
 
 
