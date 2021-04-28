@@ -6,13 +6,22 @@ from sudoku.cell import SudokuCell
 
 
 class TestSudokuCell:
-    @pytest.mark.parametrize('possibility, expected', (
-        (1, True),
-        (0, False),
-        (-1, False),
-    ))
-    def test_is_possible(self, possibility, expected):
+    @pytest.mark.parametrize('value', (1, 9))
+    def test_set_value(self, value):
         cell = SudokuCell()
+        cell.set_value(value)
+        assert cell.value == value
+        assert cell.possibilities == []
+
+    @pytest.mark.parametrize('value, possibility, expected', (
+        (5, 5, True),
+        (5, 1, False),
+        (None, 1, True),
+        (None, 0, False),
+        (None, -1, False),
+    ))
+    def test_is_possible(self, value, possibility, expected):
+        cell = SudokuCell(value)
         actual = cell.is_possible(possibility)
         assert actual == expected
 
@@ -41,8 +50,20 @@ class TestSudokuCell:
         actual = cell.is_found()
         assert actual == expected
 
+
+    @pytest.mark.parametrize('value, possibilities, actual', (
+        (None, [1, 2, 3, 4, 5, 6, 7, 8, 9], 9),
+        (None, [2, 3, 4, 6, 7, 8], 6),
+        (9, [], 1),
+    ))
+    def test_len(self, value, possibilities, actual):
+        cell = SudokuCell(value)
+        cell.possibilities = possibilities
+        assert len(cell) == actual
+
     @pytest.mark.parametrize('value, expected', (
         (1, '1'),
+        (9, '9'),
         (0, '[1, 2, 3, 4, 5, 6, 7, 8, 9]'),
         (-1, '[1, 2, 3, 4, 5, 6, 7, 8, 9]'),
         (None, '[1, 2, 3, 4, 5, 6, 7, 8, 9]'),
@@ -75,8 +96,9 @@ class TestSudokuCell:
     @pytest.mark.parametrize('value1, value2, possibilities1, possibilities2, expected', (
         (1, 1, [], [], True),
         (0, 0, [], [], True),
-        (0, 0, [1, 2], [8, 9], False),
-        (0, 0, [1, 9], [1, 9], True),
+        (None, None, [1, 2], [8, 9], False),
+        (None, None, [8, 9], [7, 8, 9], False),
+        (None, None, [1, 9], [1, 9], True),
         (0, 1, [], [], False),
         (-1, 9, [], [], False),
         (None, 1, [], [], False),
@@ -84,10 +106,13 @@ class TestSudokuCell:
     ))
     def test_eq(self, value1, value2, possibilities1, possibilities2, expected):
         cell1 = SudokuCell(value1)
-        for possibility in possibilities1:
-            cell1.remove_possibility(possibility)
+        cell1.possibilities = possibilities1
         cell2 = SudokuCell(value2)
-        for possibility in possibilities2:
-            cell2.remove_possibility(possibility)
+        cell2.possibilities = possibilities2
         actual = cell1 == cell2
         assert actual == expected
+
+    def test_eq_type(self):
+        cell = SudokuCell(1)
+        actual = cell == 1
+        assert actual is False
