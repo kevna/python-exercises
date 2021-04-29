@@ -3,8 +3,9 @@
 from itertools import zip_longest
 from typing import Sequence, Optional, Iterator
 
+from ansi.colour import fg, fx  # type: ignore
+
 from sudoku.cell import SudokuCell
-from sudoku.ColourText import Colours, colour
 
 
 UserGrid = Sequence[Sequence[Optional[int]]]
@@ -18,8 +19,7 @@ class SudokuGrid:
     BOX_HEIGHT = 3
     BOX_WIDTH = 3
 
-    COMPLETEDCOLOURCELL = Colours.GREEN
-    COMPLETEDCOLOURLINE = Colours.PINK
+    COMPLETED_COLOUR = fg.green + fx.crossed_out
 
     LINECROS = '┼'
     LINEVERT = '│'
@@ -130,10 +130,7 @@ class SudokuGrid:
         for col in range(width):
             if col % self.BOX_WIDTH == 0:
                 row.append(self.LINECROS)
-            line = self.LINEHORI
-            if self.col_complete(col):
-                line = colour(line, self.COMPLETEDCOLOURLINE)
-            row.append(line)
+            row.append(self.LINEHORI)
         row.append(self.LINECROS)
         return self.LINEHORI.join(row)
 
@@ -141,32 +138,32 @@ class SudokuGrid:
         result = []
         found_count = 0
         possibility_count = 0
-        width = 0
+        hrule = self.row_separator(self.GRID_WIDTH)
         for r, row in enumerate(self._grid):
-            width = len(row)
             if r % self.BOX_HEIGHT == 0:
-                result.append(self.row_separator(width))
-            line = self.LINEVERT
-            if self.row_complete(r):
-                line = colour(line, self.COMPLETEDCOLOURLINE)
-            row_text = []
+                result.append(hrule)
+            row_text = [self.LINEVERT]
             for c, cell in enumerate(row):
-                if c % self.BOX_WIDTH == 0:
-                    row_text.append(line)
-                cell_text = str(cell)
                 if cell:
                     found_count += 1
                 else:
                     possibility_count += len(cell)
-                if self.cell_complete(r, c):
-                    cell_text = colour(cell_text, self.COMPLETEDCOLOURCELL)
-                row_text.append(cell_text)
-            row_text.append(line)
-            result.append(' '.join(row_text))
-        result.append(self.row_separator(width))
-        result.append(f'Total Found: {found_count}')
-        result.append(f'Remaining Possibilities: {possibility_count}')
-        return'\n' .join(result)
+                space = ' '
+                cell_text = f'{cell}'
+                if hl_whitespace := (self.row_complete(r) or self.box_complete(r, c)):
+                    space = self.COMPLETED_COLOUR(space)
+                if hl_whitespace or self.col_complete(c):
+                    cell_text = self.COMPLETED_COLOUR(cell_text)
+                row_text += [space, cell_text]
+                if (c+1) % self.BOX_WIDTH == 0:
+                    row_text += [space, self.LINEVERT]
+            result.append(''.join(row_text))
+        result += [
+            hrule,
+            f'Total Found: {found_count}',
+            f'Remaining Possibilities: {possibility_count}',
+        ]
+        return '\n'.join(result)
 
     def __len__(self) -> int:
         return len(self._grid)

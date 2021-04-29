@@ -3,6 +3,7 @@
 from itertools import zip_longest
 from unittest.mock import patch, call
 
+from ansi.colour import fg, fx  # type: ignore
 import pytest
 
 from sudoku.grid import SudokuGrid
@@ -230,21 +231,39 @@ class TestSudokuGrid:
         actual = grid == None
         assert actual is False
 
+    hl = fg.green + fx.crossed_out
+    b = fx.bold
+    r = fx.reset
+    hlb = f'{r}{hl}{b}'
     @pytest.mark.parametrize('grid_arg, expected', (
-        ([], '┼\nTotal Found: 0\nRemaining Possibilities: 0'),
-        ([[]], '┼\n\x1b[95m│\x1b[0m\n┼\nTotal Found: 0\nRemaining Possibilities: 0'),
-        #(
-        #    [
-        #        [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        #        [2, 3, 4, 5, 6, 7, 8, 9, 1],
-        #    ],
-        #    '┼───────┼───────┼───────┼\n'
-        #    '│ 1 2 3 │ 4 5 6 │ 7 8 9 │\n'
-        #    '│ 2 3 4 │ 5 6 7 │ 8 9 1 │\n'
-        #    '┼───────┼───────┼───────┼\n'
-        #    'Total Found: 18\n'
-        #    'Remaining Possibilities: 0'
-        #),
+        (
+            [],
+            '┼───────┼───────┼───────┼\n'
+            'Total Found: 0\nRemaining Possibilities: 0'
+        ),
+        (
+            [[]],
+            '┼───────┼───────┼───────┼\n'
+            '│\n'
+            '┼───────┼───────┼───────┼\n'
+            'Total Found: 0\nRemaining Possibilities: 0'
+        ),
+        (
+            [
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [2, 3, 4, 5, 6, 7, 8, 9, 1],
+            ],
+            '┼───────┼───────┼───────┼\n'
+            f'│{hl} {hlb}1{r}{r}{hl} {hlb}2{r}{r}{hl} {hlb}3{r}{r}{hl} {r}│'
+                f'{hl} {hlb}4{r}{r}{hl} {hlb}5{r}{r}{hl} {hlb}6{r}{r}{hl} {r}│'
+                f'{hl} {hlb}7{r}{r}{hl} {hlb}8{r}{r}{hl} {hlb}9{r}{r}{hl} {r}│\n'
+            f'│{hl} {hlb}2{r}{r}{hl} {hlb}3{r}{r}{hl} {hlb}4{r}{r}{hl} {r}│'
+                f'{hl} {hlb}5{r}{r}{hl} {hlb}6{r}{r}{hl} {hlb}7{r}{r}{hl} {r}│'
+                f'{hl} {hlb}8{r}{r}{hl} {hlb}9{r}{r}{hl} {hlb}1{r}{r}{hl} {r}│\n'
+            '┼───────┼───────┼───────┼\n'
+            'Total Found: 18\n'
+            'Remaining Possibilities: 0'
+        ),
     ))
     def test_str(self, grid_arg, expected):
         grid = SudokuGrid(grid_arg)

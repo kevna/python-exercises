@@ -1,13 +1,13 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-from typing import Optional
+from typing import Optional, cast
 
-from sudoku.ColourText import Colours, colour
+from ansi.colour import fx  # type: ignore
+
 
 class SudokuCell:
     """Cell model for a sudoku to solve."""
     ALLPOSSIBILITIES = (1, 2, 3, 4, 5, 6, 7, 8, 9)
-    ORIGINALCOLOUR = Colours.BLUE
 
     def __init__(self, value: Optional[int] = None):
         self.possibilities: list[int] = list(self.ALLPOSSIBILITIES)
@@ -76,12 +76,12 @@ class SudokuCell:
         return result
 
     def __str__(self) -> str:
-        result = ' '
         if self:
-            result = f'{self._value}'
+            highlight = fx.italic
             if self.original:
-                result = colour(result, self.ORIGINALCOLOUR)
-        return result
+                highlight = fx.bold
+            return cast(str, highlight(f'{self._value}'))
+        return ' '
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, SudokuCell):

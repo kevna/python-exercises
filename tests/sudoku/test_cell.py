@@ -1,5 +1,6 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
+from ansi.colour import fx  # type: ignore
 import pytest
 
 from sudoku.cell import SudokuCell
@@ -85,7 +86,8 @@ class TestSudokuCell:
         assert actual == expected
 
     @pytest.mark.parametrize('value, expected', (
-        (1, '\x1b[94m1\x1b[0m'),
+        (1, fx.bold('1')),
+        (9, fx.bold('9')),
         (0, ' '),
         (None, ' '),
     ))
@@ -95,7 +97,8 @@ class TestSudokuCell:
         assert actual == expected
 
     @pytest.mark.parametrize('value, expected', (
-        (1, '1'),
+        (1, fx.italic('1')),
+        (9, fx.italic('9')),
         (None, ' '),
     ))
     def test_str_found(self, value, expected):
