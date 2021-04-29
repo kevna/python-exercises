@@ -1,8 +1,9 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 from itertools import zip_longest
-import pytest
 from unittest.mock import patch, call
+
+import pytest
 
 from sudoku.grid import SudokuGrid
 

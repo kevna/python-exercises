@@ -1,6 +1,7 @@
 from argparse import Namespace
-import pytest
 from unittest.mock import Mock
+
+import pytest
 
 from sudoku.solver import SudokuSolver, SolveFailedException
 
@@ -26,15 +27,15 @@ class TestSudokuSolver:
         # Check that finding a swap resets the fail counter
         ([False, False, False, False, True], [0, 0, 1, 0, 0]),
     ))
-    def test_solve(self, mock_complete, mock_solve, solver):
+    def test_iter(self, mock_complete, mock_solve, solver):
         solver.grid.is_complete = Mock(side_effect=mock_complete)
         solver.solve_step = Mock(side_effect=mock_solve)
-        solver.solve()
+        list(solver)  # Using list() to evaluate the generator until it exits
 
-    def test_solve_failed(self, solver):
+    def test_iter_failed(self, solver):
         solver.grid.is_complete = Mock(side_effect=[False, False, False])
         with pytest.raises(SolveFailedException):
-            solver.solve()
+            list(solver)  # Using list() to evaluate the generator until it fails
 
     @pytest.mark.parametrize('args, expected', (
         (['web.sud'], Namespace(filename='web.sud', limit=None)),

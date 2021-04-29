@@ -26,15 +26,15 @@ class SudokuSolver(ABC):
         """
         return 0
 
-    def solve(self):
+    def __iter__(self):
         """Attempt to solve the sudoku.
         This is done by attempting the solve_step implementation repeatedly
         until the limit of consecutive attempts fail to find changes.
         """
         while not self.grid.is_complete():
             if self.solve_step():
-                print(self.grid)
                 self.failed_steps = 0
+                yield self.grid
             else:
                 self.failed_steps += 1
                 if self.failed_steps >= self.fail_limit:
@@ -59,7 +59,8 @@ class SudokuSolver(ABC):
             args.limit
         )
         try:
-            solver.solve()
+            for grid in solver:
+                print(grid)
         except KeyboardInterrupt:
             print('User exit.')
         except SolveFailedException as err:
