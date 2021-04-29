@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-import argparse
+from argparse import ArgumentParser
+from typing import Optional
 
 from sudoku.grid import SudokuGrid
 
@@ -12,8 +13,8 @@ class SudokuSolver(ABC):
 
     STEPFAILLIMIT = 9
 
-    def __init__(self, filename: str, fail_limit: int = None):
-        self.grid = SudokuGrid.load_file(filename)
+    def __init__(self, grid: SudokuGrid, fail_limit: int = None):
+        self.grid = grid
         self.fail_limit = fail_limit or self.STEPFAILLIMIT
         self.failed_steps = 0
 
@@ -40,19 +41,23 @@ class SudokuSolver(ABC):
                     raise SolveFailedException('Couldn\'t find any more moves toward solution.')
 
     @staticmethod
-    def args():
+    def args(parser: Optional[ArgumentParser] = None) -> ArgumentParser:
         """Parse the arguments the solver is called with to prepare to run the solver."""
-        parser = argparse.ArgumentParser()
+        if not parser:
+            parser = ArgumentParser()
         parser.add_argument('filename', type = str, help = 'name of a sudoku file to solve')
         parser.add_argument('-l', '--limit', type = int, help =
                             'limit attempted steps before solve attempt is counted as failure')
-        return parser.parse_args()
+        return parser
 
     @classmethod
     def main(cls):
         """Run the solver by getting the parsed arguments and triggering the solve loop."""
-        args = cls.args()
-        solver = cls(args.filename, args.limit)
+        args = cls.args().parse_args()
+        solver = cls(
+            SudokuGrid.load_file(args.filename),
+            args.limit
+        )
         try:
             solver.solve()
         except KeyboardInterrupt:

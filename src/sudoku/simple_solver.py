@@ -1,9 +1,11 @@
 from sudoku.solver import SudokuSolver
 
 
-class SudokuSolverSimple(SudokuSolver):
+class SimpleSudokuSolver(SudokuSolver):
     """Solve sudokus using only beginer technique.
     """
+
+    STEPFAILLIMIT = 1
 
     def row_remove_possibility(self, row: int, number: int) -> int:
         """Remove known value from the possibilities of the row."""
@@ -46,4 +48,4 @@ class SudokuSolverSimple(SudokuSolver):
 
 
 if __name__ == '__main__':
-    SudokuSolverSimple.main()
+    SimpleSudokuSolver.main()
