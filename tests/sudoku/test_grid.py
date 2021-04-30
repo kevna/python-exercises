@@ -238,14 +238,14 @@ class TestSudokuGrid:
     @pytest.mark.parametrize('grid_arg, expected', (
         (
             [],
-            '┼───────┼───────┼───────┼\n'
+            '┌───┐\n'
             'Total Found: 0\nRemaining Possibilities: 0'
         ),
         (
             [[]],
-            '┼───────┼───────┼───────┼\n'
+            '┌───┐\n'
             '│\n'
-            '┼───────┼───────┼───────┼\n'
+            '┌───┐\n'
             'Total Found: 0\nRemaining Possibilities: 0'
         ),
         (
@@ -253,14 +253,14 @@ class TestSudokuGrid:
                 [1, 2, 3, 4, 5, 6, 7, 8, 9],
                 [2, 3, 4, 5, 6, 7, 8, 9, 1],
             ],
-            '┼───────┼───────┼───────┼\n'
+            '┌───────┬───────┬───────┐\n'
             f'│{hl} {hlb}1{r}{r}{hl} {hlb}2{r}{r}{hl} {hlb}3{r}{r}{hl} {r}│'
                 f'{hl} {hlb}4{r}{r}{hl} {hlb}5{r}{r}{hl} {hlb}6{r}{r}{hl} {r}│'
                 f'{hl} {hlb}7{r}{r}{hl} {hlb}8{r}{r}{hl} {hlb}9{r}{r}{hl} {r}│\n'
             f'│{hl} {hlb}2{r}{r}{hl} {hlb}3{r}{r}{hl} {hlb}4{r}{r}{hl} {r}│'
                 f'{hl} {hlb}5{r}{r}{hl} {hlb}6{r}{r}{hl} {hlb}7{r}{r}{hl} {r}│'
                 f'{hl} {hlb}8{r}{r}{hl} {hlb}9{r}{r}{hl} {hlb}1{r}{r}{hl} {r}│\n'
-            '┼───────┼───────┼───────┼\n'
+            '├───────┼───────┼───────┤\n'
             'Total Found: 18\n'
             'Remaining Possibilities: 0'
         ),

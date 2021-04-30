@@ -21,7 +21,6 @@ class SudokuGrid:
 
     COMPLETED_COLOUR = fg.green + fx.crossed_out
 
-    LINECROS = '┼'
     LINEVERT = '│'
     LINEHORI = '─'
 
@@ -124,24 +123,30 @@ class SudokuGrid:
                     return False
         return True
 
-    def row_separator(self, width: int) -> str:
+    def row_separator(self, width: int, row: int) -> str:
         """This gets a row of separators between regions of the grid."""
-        row = []
-        for col in range(width):
+        left, cross, right = '├', '┼', '┤'
+        if row == 0:
+            left, cross, right = '┌', '┬', '┐'
+        elif row >= self.GRID_HEIGHT-1:
+            left, cross, right = '└', '┴', '┘'
+        row_text = [left, self.LINEHORI]
+        for col in range(1, width):
             if col % self.BOX_WIDTH == 0:
-                row.append(self.LINECROS)
-            row.append(self.LINEHORI)
-        row.append(self.LINECROS)
-        return self.LINEHORI.join(row)
+                row_text.append(cross)
+            row_text.append(self.LINEHORI)
+        row_text.append(right)
+        return self.LINEHORI.join(row_text)
 
     def __str__(self) -> str:
         result = []
         found_count = 0
         possibility_count = 0
-        hrule = self.row_separator(self.GRID_WIDTH)
+        width = r = 0
         for r, row in enumerate(self._grid):
+            width = len(row)
             if r % self.BOX_HEIGHT == 0:
-                result.append(hrule)
+                result.append(self.row_separator(width, r))
             row_text = [self.LINEVERT]
             for c, cell in enumerate(row):
                 if cell:
@@ -159,7 +164,7 @@ class SudokuGrid:
                     row_text += [space, self.LINEVERT]
             result.append(''.join(row_text))
         result += [
-            hrule,
+            self.row_separator(width, r),
             f'Total Found: {found_count}',
             f'Remaining Possibilities: {possibility_count}',
         ]
@@ -174,7 +179,6 @@ class SudokuGrid:
     def __iter__(self) -> Iterator[Sequence[SudokuCell]]:
         for row in self._grid:
             yield row
-
 
     @staticmethod
     def main():

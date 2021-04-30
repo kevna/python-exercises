@@ -59,6 +59,7 @@ sudoku
 - [X] use set symmetric_difference in `cell.__eq__`
 - [X] check_ can be removed from methods when they're type-hinted as returning boolean
 - [X] SudokuSolver should be abstract, solve_step should be abstractmethod
+- [ ] identify a cell if it's the only one left in a row/col/box that is a possibility
 - [ ] consider if we can cerate an itermediate box object such that grid -> array of boxes -> array of cells
     - [ ] helpers at the grid level to allow it to be used as one whole grid as well
     - [ ] helpers to get the possibilities (things still to be found) in a row/column at both levels and in a box
