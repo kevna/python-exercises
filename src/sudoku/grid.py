@@ -3,8 +3,9 @@
 from itertools import zip_longest
 from typing import Sequence, Optional, Iterator
 
+from ansi.colour import fg, fx  # type: ignore
+
 from sudoku.cell import SudokuCell
-from sudoku.ColourText import Colours, colour
 
 
 UserGrid = Sequence[Sequence[Optional[int]]]
@@ -18,10 +19,8 @@ class SudokuGrid:
     BOX_HEIGHT = 3
     BOX_WIDTH = 3
 
-    COMPLETEDCOLOURCELL = Colours.GREEN
-    COMPLETEDCOLOURLINE = Colours.PINK
+    COMPLETED_COLOUR = fg.green + fx.crossed_out
 
-    LINECROS = '┼'
     LINEVERT = '│'
     LINEHORI = '─'
 
@@ -62,56 +61,56 @@ class SudokuGrid:
         box_col = (cell_col // self.BOX_WIDTH) * self.BOX_WIDTH
         return box_row, box_col
 
-    def check_row_complete(self, r: int) -> bool:
+    def row_complete(self, r: int) -> bool:
         """Check if an entire row has been completed."""
         if r in self._complete_rows:
             return True
         result = False
         for cell in self._grid[r]:
-            if not cell.is_found():
+            if not cell:
                 break
         else:
             self._complete_rows.append(r)
             result = True
         return result
 
-    def check_col_complete(self, c: int) -> bool:
+    def col_complete(self, c: int) -> bool:
         """Check if an entire col has been completed."""
         if c in self._complete_cols:
             return True
         result = False
         for row in self._grid:
-            if not row[c].is_found():
+            if not row[c]:
                 break
         else:
             self._complete_cols.append(c)
             result = True
         return result
 
-    def check_box_complete(self, cell_row: int, cell_col: int) -> bool:
+    def box_complete(self, cell_row: int, cell_col: int) -> bool:
         """Check if an entire sub box has been completed."""
         box_row, box_col = self.get_box_coords(cell_row, cell_col)
         if (box_row, box_col) in self._complete_boxes:
             return True
         for row in range(box_row, box_row + self.BOX_HEIGHT):
             for col in range(box_col, box_col + self.BOX_WIDTH):
-                if not self._grid[row][col].is_found():
+                if not self._grid[row][col]:
                     return False
         self._complete_boxes.append((box_row, box_col))
         return True
 
-    def check_cell_complete(self, r: int, c: int) -> bool:
+    def cell_complete(self, r: int, c: int) -> bool:
         """Check if a cell is in a completed row/box/cell."""
         return (
-            self.check_row_complete(r)
-            or self.check_col_complete(c)
-            or self.check_box_complete(r, c)
+            self.row_complete(r)
+            or self.col_complete(c)
+            or self.box_complete(r, c)
         )
 
     def is_complete(self) -> bool:
         """Check if the entire grid has been completed."""
         for row in range(len(self._grid)):
-            if not self.check_row_complete(row):
+            if not self.row_complete(row):
                 return False
         return True
 
@@ -124,49 +123,52 @@ class SudokuGrid:
                     return False
         return True
 
-    def row_separator(self, width: int) -> str:
+    def row_separator(self, width: int, row: int) -> str:
         """This gets a row of separators between regions of the grid."""
-        row = []
-        for col in range(width):
+        left, cross, right = '├', '┼', '┤'
+        if row == 0:
+            left, cross, right = '┌', '┬', '┐'
+        elif row >= self.GRID_HEIGHT-1:
+            left, cross, right = '└', '┴', '┘'
+        row_text = [left, self.LINEHORI]
+        for col in range(1, width):
             if col % self.BOX_WIDTH == 0:
-                row.append(self.LINECROS)
-            line = self.LINEHORI
-            if self.check_col_complete(col):
-                line = colour(line, self.COMPLETEDCOLOURLINE)
-            row.append(line)
-        row.append(self.LINECROS)
-        return self.LINEHORI.join(row)
+                row_text.append(cross)
+            row_text.append(self.LINEHORI)
+        row_text.append(right)
+        return self.LINEHORI.join(row_text)
 
     def __str__(self) -> str:
         result = []
         found_count = 0
         possibility_count = 0
-        width = 0
+        width = r = 0
         for r, row in enumerate(self._grid):
             width = len(row)
             if r % self.BOX_HEIGHT == 0:
-                result.append(self.row_separator(width))
-            line = self.LINEVERT
-            if self.check_row_complete(r):
-                line = colour(line, self.COMPLETEDCOLOURLINE)
-            row_text = []
+                result.append(self.row_separator(width, r))
+            row_text = [self.LINEVERT]
             for c, cell in enumerate(row):
-                if c % self.BOX_WIDTH == 0:
-                    row_text.append(line)
-                cell_text = str(cell)
-                if cell.is_found():
+                if cell:
                     found_count += 1
                 else:
                     possibility_count += len(cell)
-                if self.check_cell_complete(r, c):
-                    cell_text = colour(cell_text, self.COMPLETEDCOLOURCELL)
-                row_text.append(cell_text)
-            row_text.append(line)
-            result.append(' '.join(row_text))
-        result.append(self.row_separator(width))
-        result.append(f'Total Found: {found_count}')
-        result.append(f'Remaining Possibilities: {possibility_count}')
-        return'\n' .join(result)
+                space = ' '
+                cell_text = f'{cell}'
+                if hl_whitespace := (self.row_complete(r) or self.box_complete(r, c)):
+                    space = self.COMPLETED_COLOUR(space)
+                if hl_whitespace or self.col_complete(c):
+                    cell_text = self.COMPLETED_COLOUR(cell_text)
+                row_text += [space, cell_text]
+                if (c+1) % self.BOX_WIDTH == 0:
+                    row_text += [space, self.LINEVERT]
+            result.append(''.join(row_text))
+        result += [
+            self.row_separator(width, r),
+            f'Total Found: {found_count}',
+            f'Remaining Possibilities: {possibility_count}',
+        ]
+        return '\n'.join(result)
 
     def __len__(self) -> int:
         return len(self._grid)
@@ -177,7 +179,6 @@ class SudokuGrid:
     def __iter__(self) -> Iterator[Sequence[SudokuCell]]:
         for row in self._grid:
             yield row
-
 
     @staticmethod
     def main():

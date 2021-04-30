@@ -1,9 +1,11 @@
 from sudoku.solver import SudokuSolver
 
 
-class SudokuSolverSimple(SudokuSolver):
+class SimpleSudokuSolver(SudokuSolver):
     """Solve sudokus using only beginer technique.
     """
+
+    STEPFAILLIMIT = 1
 
     def row_remove_possibility(self, row: int, number: int) -> int:
         """Remove known value from the possibilities of the row."""
@@ -38,7 +40,7 @@ class SudokuSolverSimple(SudokuSolver):
         cells_changed = 0
         for row in range(len(self.grid)):
             for col in range(len(self.grid[row])):
-                if self.grid[row][col].is_found() and (number := self.grid[row][col].value):
+                if number := self.grid[row][col].value:
                     cells_changed += self.row_remove_possibility(row, number)
                     cells_changed += self.col_remove_possibility(col, number)
                     cells_changed += self.box_remove_possibility(row, col, number)
@@ -46,4 +48,4 @@ class SudokuSolverSimple(SudokuSolver):
 
 
 if __name__ == '__main__':
-    SudokuSolverSimple.main()
+    SimpleSudokuSolver.main()

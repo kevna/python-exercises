@@ -1,36 +1,47 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-from typing import Optional
+from typing import Optional, cast
 
-from sudoku.ColourText import Colours, colour
+from ansi.colour import fx  # type: ignore
+
 
 class SudokuCell:
     """Cell model for a sudoku to solve."""
     ALLPOSSIBILITIES = (1, 2, 3, 4, 5, 6, 7, 8, 9)
-    ORIGINALCOLOUR = Colours.BLUE
 
     def __init__(self, value: Optional[int] = None):
+        self.possibilities: list[int] = list(self.ALLPOSSIBILITIES)
         if value in self.ALLPOSSIBILITIES:
-            self.set_value(value)
+            self.value = value
             self.original = True
         else:
-            self.value: Optional[int] = None
-            self.possibilities: list[int] = list(self.ALLPOSSIBILITIES)
+            self._value: Optional[int] = None
             self.original = False
 
-    def set_value(self, value: int):
+    @property
+    def value(self) -> Optional[int]:
+        """Getter for value.
+        This is trivial, but allows us to have a setter with validation.
+        """
+        return self._value
+
+    @value.setter
+    def value(self, value: int):
         """Setter for value.
         This blanks possibilites since the value is now set.
+        :raises ValueError: when it's invalid to set the given value
         """
-        self.value = value
+        if value not in self.possibilities:
+            raise ValueError('Value {value} is not possible for cell')
+        self._value = value
         self.possibilities = []
 
     def is_possible(self, possibility: int) -> bool:
         """Check if a value is still possible in this cell."""
         result = False
-        if not self.is_found():
+        if not self:
             result = possibility in self.possibilities
-        elif possibility == self.value:
+        elif possibility == self._value:
             result = True
         return result
 
@@ -39,50 +50,46 @@ class SudokuCell:
         If there is only one possibility left then this is automatically set as value
         since this must be the case.
         """
-        if self.is_found() or not self.is_possible(possibility):
+        if self or not self.is_possible(possibility):
             return False
         self.possibilities.remove(possibility)
         if len(self.possibilities) <= 1:
-            self.set_value(self.possibilities[0])
+            self.value = self.possibilities[0]
         return True
 
-    def is_found(self) -> bool:
+    def __bool__(self) -> bool:
         """Test if the cell's value has been found."""
-        return self.value is not None
+        return self._value is not None
 
     def __len__(self) -> int:
-        if self.is_found():
+        if self:
             result = 1
         else:
             result = len(self.possibilities)
         return result
 
     def __repr__(self) -> str:
-        if self.is_found():
-            result = f'{self.value}'
+        if self:
+            result = f'{self._value}'
         else:
             result = f'{self.possibilities}'
         return result
 
     def __str__(self) -> str:
-        result = ' '
-        if self.is_found():
-            result = f'{self.value}'
+        if self:
+            highlight = fx.italic
             if self.original:
-                result = colour(result, self.ORIGINALCOLOUR)
-        return result
+                highlight = fx.bold
+            return cast(str, highlight(f'{self._value}'))
+        return ' '
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, SudokuCell):
             return False
         result = False
-        if self.value == other.value:
+        if self._value == other._value:
             result = True
-            if not self.is_found():
-                for i in self.possibilities:
-                    if i not in other.possibilities:
-                        return False
-                for j in other.possibilities:
-                    if j not in self.possibilities:
-                        return False
+            if not self:
+                if set(self.possibilities) ^ set(other.possibilities):
+                    return False
         return result

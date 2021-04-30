@@ -52,15 +52,21 @@ sorting
 
 sudoku
 ------
-- [ ] make cell value a property
+- [X] make cell value a property
     - set_value then becomes an assignment
     - we should probably be freezing the value once assigned
-- [ ] make `cell.is_found` into `cell.__bool__`
-- [ ] use set symmetric_difference in `cell.__eq__`
-- [ ] check_ can be removed from methods when they're type-hinted as returning boolean
-- [ ] SudokuSolver should be abstract, solve_step should be abstractmethod
+- [X] make `cell.is_found` into `cell.__bool__`
+- [X] use set symmetric_difference in `cell.__eq__`
+- [X] check_ can be removed from methods when they're type-hinted as returning boolean
+- [X] SudokuSolver should be abstract, solve_step should be abstractmethod
+- [ ] identify a cell if it's the only one left in a row/col/box that is a possibility
+- [ ] consider if we can cerate an itermediate box object such that grid -> array of boxes -> array of cells
+    - [ ] helpers at the grid level to allow it to be used as one whole grid as well
+    - [ ] helpers to get the possibilities (things still to be found) in a row/column at both levels and in a box
+        - we could then add the case where a possibility must be on one row/column of a box, thus blocking it from that row in the others
 - [ ] consider giving cell object awareness of it's coordinate
     - if we do this we can iterate the cells and get the row/col without using enumerate
     - we could also then maintain a list of found cells, this could offer a vast speed bost to the simple solver
         - perhaps newly known, as these are the ones likely to change the next results
+        - tried this, didn't have a significant impact on runtime for simple solver
 - [ ] add validation method to the sudoku grid
