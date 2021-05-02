@@ -41,7 +41,7 @@ life
 
 sorting
 -------
-- [ ] sorter parent class should be abstract, sort should be abstract method
+- [X] sorter parent class should be abstract, sort should be abstract method
 - [ ] potentially more pythonic to return the sorted list rather than mutating the original
     - since this can be done with a slice it may also impact the time comparison less
 - [ ] create hybrid implementations of qick and merge sorts
