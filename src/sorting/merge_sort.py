@@ -5,9 +5,9 @@ class MergeSort(Sorter):
     Divide the list in half, sort each half and merge them in order.
     """
 
-    def sort(self, items: SortList, cutoff: int = None):
-        result = self._merge_sort(items)
-        self._mutate_list(items, result)
+    def sort(self, items: SortList, cutoff: int = None) -> SortList:
+        items = items[:]
+        return self._merge_sort(items)
 
     def _merge_sort(self, items: SortList):
         if len(items) <= 1:

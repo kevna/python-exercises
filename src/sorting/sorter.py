@@ -12,19 +12,8 @@ class Sorter(Generic[SortItems], ABC):
     if they were only matching functions.
     """
 
-    @staticmethod
-    def _mutate_list(subject: SortList, update: SortList):
-        """Helper which mutates the sorted results into the original list.
-        This is because our current interface is to mutate the original list
-        rather than returning the sorted list.
-        """
-        overwrite = len(subject)
-        for i in range(overwrite):
-            subject[i] = update[i]
-        subject.extend(update[overwrite:])
-
     @abstractmethod
-    def sort(self, items: SortList, cutoff: Optional[int] = None):
+    def sort(self, items: SortList, cutoff: Optional[int] = None) -> SortList:
         """Provide sorting functionality.
         This method is to be overridden by sorting implementations.
         """

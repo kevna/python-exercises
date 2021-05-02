@@ -7,6 +7,7 @@ class StupidSort(Sorter):
     """
 
     def sort(self, items: SortList, cutoff: int = None):
+        items = items[:]
         tel = 0
         i = 0
         while i < len(items) - 1:
@@ -23,3 +24,4 @@ class StupidSort(Sorter):
                 tel = 0
             else:
                 i += 1
+        return items

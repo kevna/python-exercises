@@ -7,7 +7,8 @@ class OpBubbleSort(Sorter):
     Optimisation: if no swaps were made everything else is sorted, we can shortcut out.
     """
 
-    def sort(self, items: SortList, cutoff: int = None):
+    def sort(self, items: SortList, cutoff: int = None) -> SortList:
+        items = items[:]
         swaps = 1
         i = 1
         length = len(items)
@@ -18,3 +19,4 @@ class OpBubbleSort(Sorter):
                     items[j], items[j + 1] = items[j + 1], items[j]
                     swaps += 1
             i += 1
+        return items

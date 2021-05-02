@@ -24,7 +24,8 @@ class CocktailShakerSort(Sorter):
                 swaps += 1
         return swaps
 
-    def sort(self, items: SortList, cutoff: int = None):
+    def sort(self, items: SortList, cutoff: int = None) -> SortList:
+        items = items[:]
         swaps = 1
         i = 0
         self.length = len(items)
@@ -32,3 +33,4 @@ class CocktailShakerSort(Sorter):
             swaps = self._bubble_down(items, i)
             swaps += self._bubble_up(items, i)
             i += 1
+        return items

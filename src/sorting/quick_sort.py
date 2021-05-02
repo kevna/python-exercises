@@ -9,9 +9,9 @@ class QuickSort(Sorter):
     at one end of the list, reducing efficiency.
     """
 
-    def sort(self, items: SortList, cutoff: int = None):
-        result = self._quick_sort(items)
-        self._mutate_list(items, result)
+    def sort(self, items: SortList, cutoff: int = None) -> SortList:
+        items = items[:]
+        return self._quick_sort(items)
 
     def _quick_sort(self, items: SortList):
         if len(items) < 2:
