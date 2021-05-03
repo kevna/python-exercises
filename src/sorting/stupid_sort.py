@@ -1,6 +1,7 @@
 from sorting.sorter import Sorter, SortList
 
-class StupidSort(Sorter):
+
+class StupidSort(Sorter):  # pylint: disable=too-few-public-methods
     """Implementation of stupid sort, also known as gnome sort.
     If the current pair are out of order swap them and move back one
     otherwise step forward.

@@ -1,6 +1,7 @@
 from sorting.sorter import Sorter, SortList
 
-class MergeSort(Sorter):
+
+class MergeSort(Sorter):  # pylint: disable=too-few-public-methods
     """Implementation of merge sort.
     Divide the list in half, sort each half and merge them in order.
     """

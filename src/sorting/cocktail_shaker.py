@@ -1,6 +1,7 @@
 from sorting.sorter import Sorter, SortList
 
-class CocktailShakerSort(Sorter):
+
+class CocktailShakerSort(Sorter):  # pylint: disable=too-few-public-methods
     """Implementation of cocktail shaker sort.
     This bubbles one item to either end on each pass.
     Like bubble sort we shortcut out if no items needed to be swapped.

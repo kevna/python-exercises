@@ -6,7 +6,7 @@ SortItems = TypeVar('SortItems')
 SortList = list[SortItems]
 
 
-class Sorter(Generic[SortItems], ABC):
+class Sorter(Generic[SortItems], ABC):  # pylint: disable=too-few-public-methods
     """Abstract parent for implementing sorting algorithms.
     This allows us to have a defined interface which wouldn't be possible
     if they were only matching functions.

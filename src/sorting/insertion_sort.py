@@ -1,6 +1,7 @@
 from sorting.sorter import Sorter, SortList
 
-class InsertionSort(Sorter):
+
+class InsertionSort(Sorter):  # pylint: disable=too-few-public-methods
     """Implementation of insertion sort.
     Take each item and move it to where it belongs in the sorted list ahead of it.
     """

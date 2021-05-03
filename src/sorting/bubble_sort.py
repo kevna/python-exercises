@@ -1,6 +1,7 @@
 from sorting.sorter import Sorter, SortList
 
-class OpBubbleSort(Sorter):
+
+class OpBubbleSort(Sorter):  # pylint: disable=too-few-public-methods
     """Implementation of optimised bubble sort.
     Compare the current pair, if they are out of order, swap them then move forward.
     This bubbles the highest value to the end of the list, the next pass is one shorter.

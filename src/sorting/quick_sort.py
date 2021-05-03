@@ -1,6 +1,7 @@
 from sorting.sorter import Sorter, SortList
 
-class QuickSort(Sorter):
+
+class QuickSort(Sorter):  # pylint: disable=too-few-public-methods
     """Implementation of quick sort.
     Pick a pivot, divide the list into lower and higher values and sort them
     finally add them together with the pivot.
