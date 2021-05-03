@@ -17,15 +17,15 @@ class AckermannCache:
         self.size = 0
         self.read_size = 0
 
-    def add_cache(self, m, n, value):
+    def add_cache(self, args: tuple, value: int):
         """Add a result to the internal cache."""
-        self.cache[(m,n)] = value
+        self.cache[args] = value
         self.size += 1
 
-    def get_cache(self, m: int, n: int) -> int:
+    def get_cache(self, args: tuple) -> int:
         """Get a result from the internal cache."""
         try:
-            result = self.cache[(m, n)]
+            result = self.cache[args]
         except KeyError:
             result = False
         return result
@@ -35,7 +35,7 @@ class AckermannCache:
         with open(filename) as file:
             for line in file:
                 m, n, value = line.strip().split(',')
-                self.add_cache(int(m), int(n), int(value))
+                self.add_cache((int(m), int(n)), int(value))
         self.read_size = self.size
 
     def save_cache(self, filename: str):
@@ -51,7 +51,7 @@ class AckermannCache:
         This is recursive and grows quite quickly.
         Caching is used to avoid re-computing known values.
         """
-        result = self.get_cache(m, n)
+        result = self.get_cache((m, n))
         if result:
             return result
         result = 0
@@ -62,7 +62,7 @@ class AckermannCache:
                 result = self.get_ackermann(m-1, 1)
             else:
                 result = self.get_ackermann(m-1, self.get_ackermann(m, n-1))
-            self.add_cache(m, n, result)
+            self.add_cache((m, n), result)
         except RuntimeError as error:
             raise AckermannOverflowError(
                 f'Recursion limit of {sys.getrecursionlimit()}'
