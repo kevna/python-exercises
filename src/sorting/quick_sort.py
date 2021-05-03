@@ -13,7 +13,7 @@ class QuickSort(Sorter):
         items = items[:]
         return self._quick_sort(items)
 
-    def _quick_sort(self, items: SortList):
+    def _quick_sort(self, items: SortList) -> SortList:
         if len(items) < 2:
             return items
         split = len(items) // 2
