@@ -1,7 +1,6 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import sys
-from typing import Dict
 
 class AckermannOverflowError(RuntimeError):
     """Error class for ackermann"""
@@ -14,23 +13,19 @@ class AckermannCache:
 
     def __init__(self):
         sys.setrecursionlimit(25000)
-        self.cache: Dict[int, Dict[int, int]] = {}
+        self.cache: dict[tuple, int] = {}
         self.size = 0
         self.read_size = 0
 
     def add_cache(self, m, n, value):
         """Add a result to the internal cache."""
-        try:
-            self.cache[m]
-        except KeyError:
-            self.cache[m] = {}
-        self.cache[m][n] = value
+        self.cache[(m,n)] = value
         self.size += 1
 
     def get_cache(self, m: int, n: int) -> int:
         """Get a result from the internal cache."""
         try:
-            result = self.cache[m][n]
+            result = self.cache[(m, n)]
         except KeyError:
             result = False
         return result
@@ -48,9 +43,8 @@ class AckermannCache:
         if self.size <= self.read_size:
             return
         with open(filename, 'w') as file:
-            for m in self.cache:
-                for n in self.cache[m]:
-                    print(f'{m},{n},{self.cache[m][n]}', file=file)
+            for (m, n), value in self.cache.items():
+                print(f'{m},{n},{value}', file=file)
 
     def get_ackermann(self, m: int, n: int) -> int:
         """Calculate the ackermann-péter function of m and n.
@@ -79,11 +73,8 @@ class AckermannCache:
     def __str__(self):
         """Show the contents of the cache for debugging purposes."""
         result = []
-        for m in self.cache:
-            row = []
-            for n in self.cache[m]:
-                row.append(f'({m}, {n}) = {self.cache[m][n]}')
-            result.append('; '.join(row))
+        for (m, n), value in self.cache.items():
+            result.append(f'({m}, {n}) = {value}')
         return '\n'.join(result)
 
     def ackermann_grid(self):
