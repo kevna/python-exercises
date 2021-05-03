@@ -1,8 +1,11 @@
 ackermann
 ---------
-- [ ] make the caching more generic by moving from a 2D dict `cache[m][n]=a` to an args tuple `cache[(m,n)]=a`
+- [X] make the caching more generic by moving from a 2D dict `cache[m][n]=a` to an args tuple `cache[(m,n)]=a`
+    - [X] refactor the cache dict into this format
+    - [X] refator the caching methods to use this format
 - [ ] consider if caching can be done as a decorator rather than integrating it into the function
 - [ ] consider if we should move `cache.__str__` to `cache.__repr__` since it's not intended for public consumption
+- [ ] consider moving to csv writer for persisting the cache data
 
 life
 ----
