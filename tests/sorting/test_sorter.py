@@ -16,8 +16,7 @@ class TestSorter:
 
     def _sort_helper(self, sorter_class, items, expected):
         sorter = sorter_class()
-        actual = items[:]
-        sorter.sort(actual)
+        actual = sorter.sort(items)
         assert actual == expected
 
     @pytest.mark.parametrize('items, expected', TESTLIST)

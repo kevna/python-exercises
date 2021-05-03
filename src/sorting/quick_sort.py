@@ -1,6 +1,7 @@
 from sorting.sorter import Sorter, SortList
 
-class QuickSort(Sorter):
+
+class QuickSort(Sorter):  # pylint: disable=too-few-public-methods
     """Implementation of quick sort.
     Pick a pivot, divide the list into lower and higher values and sort them
     finally add them together with the pivot.
@@ -9,11 +10,11 @@ class QuickSort(Sorter):
     at one end of the list, reducing efficiency.
     """
 
-    def sort(self, items: SortList, cutoff: int = None):
-        result = self._quick_sort(items)
-        self._mutate_list(items, result)
+    def sort(self, items: SortList, cutoff: int = None) -> SortList:
+        items = items[:]
+        return self._quick_sort(items)
 
-    def _quick_sort(self, items: SortList):
+    def _quick_sort(self, items: SortList) -> SortList:
         if len(items) < 2:
             return items
         split = len(items) // 2

@@ -1,12 +1,14 @@
 from sorting.sorter import Sorter, SortList
 
-class StupidSort(Sorter):
+
+class StupidSort(Sorter):  # pylint: disable=too-few-public-methods
     """Implementation of stupid sort, also known as gnome sort.
     If the current pair are out of order swap them and move back one
     otherwise step forward.
     """
 
     def sort(self, items: SortList, cutoff: int = None):
+        items = items[:]
         tel = 0
         i = 0
         while i < len(items) - 1:
@@ -23,3 +25,4 @@ class StupidSort(Sorter):
                 tel = 0
             else:
                 i += 1
+        return items
