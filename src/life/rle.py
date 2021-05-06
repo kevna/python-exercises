@@ -10,21 +10,22 @@ class GenerationReader:
         except ValueError:
             return 1
 
-    def read(self, text: str) -> Grid:
-        header, text = text.split('\n', 1)
+    def parse_headers(self, header: str) -> dict:
         headers = {}
         for row in header.split(','):
             name, value = row.split('=')
             headers[name.strip()] = self.safe_int(value.strip())
-        new_grid = []
+        return headers
+
+    def parse_rows(self, headers: dict, text: str) -> Grid:
         new_row: list[bool] = []
         segment = 1
         while text:
             cell = text[:segment]
             count = self.safe_int(cell[:-1])
             if cell in ('$', '!'):
-                new_row += [False] * (headers['x']-len(new_row))
-                new_grid.append(new_row)
+                new_row += [False] * (headers['x'] - len(new_row))
+                yield new_row
                 new_row = []
             elif cell.endswith('b'):
                 new_row += [False] * count
@@ -35,7 +36,12 @@ class GenerationReader:
                 continue
             text = text[segment:]
             segment = 1
-        return new_grid
+
+    def read(self, text: str) -> Grid:
+        header, text = text.split('\n', 1)
+        headers = self.parse_headers(header)
+        return list(self.parse_rows(headers, text))
+
 
 class GenerationWriter:
     def write(self, grid: Grid) -> str:
@@ -61,5 +67,9 @@ class GenerationWriter:
                     line.append(f'{count}')
                 line.append('o')
             lines.append(''.join(line))
-        result = '$'.join(lines) + '!'
-        return '\n'.join(result[70*i:70*(i+1)] for i in range((len(result)//70)+1))
+        return '\n'.join(self.segment_string('$'.join(lines) + '!'))
+
+    def segment_string(self, string: str, length: int = 70):
+        segments = len(string) // 70
+        for i in range(segments + 1):
+            yield string[length*i:length*(i+1)]
