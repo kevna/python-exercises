@@ -13,6 +13,7 @@ class Generation:
 
     def __init__(self, grid: Grid):
         self._grid = grid
+        self.neighbours = self.generate_neighbours()
 
     @classmethod
     def random(cls, height: int, width: int) -> 'Generation':
@@ -32,21 +33,28 @@ class Generation:
         except IndexError:
             return False
 
+    def generate_neighbours(self) -> Sequence[Sequence[int]]:
+        neighbours = [[0]*len(row) for row in self._grid]
+        for Y, row in enumerate(self._grid):
+            for X, cell in enumerate(row):
+                if cell:
+                    for y in range(-1, 2):
+                        for x in range(-1, 2):
+                            row_pos = Y + y
+                            col_pos = X + x
+                            if row_pos >= 0 and col_pos >= 0 and not (x == 0 and y == 0):
+                                try:
+                                    neighbours[row_pos][col_pos] += 1
+                                except IndexError:
+                                    pass
+        return neighbours
+
     def living_neighbours(self, row: int, col: int) -> int:
         """Test whether a cell should survive from the previous generation into a new one.
         This is done by counting the 8 (orthogonal and diagonal) neighbouring cells
         and then applying the classic game of life rules: B3/S23.
         """
-        live_neighbours = 0
-        for i in range(-1, 2):
-            for j in range(-1, 2):
-                row_pos = row + i
-                col_pos = col + j
-                if row_pos >= 0 and col_pos >= 0 and self.alive(row_pos, col_pos):
-                    live_neighbours += 1
-        if self.alive(row, col):
-            live_neighbours -= 1
-        return live_neighbours
+        return self.neighbours[row][col]
 
     def __xor__(self, other: 'Generation') -> int:
         """Compare generations of the internal grid representation.
