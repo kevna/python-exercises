@@ -14,7 +14,8 @@ class Game:
         self.current_gen = gen
         self.height = len(gen._grid)
         self.width = len(gen._grid[0])
-        self.end_threshold = log(self.height*self.width)
+        area = self.height*self.width
+        self.end_threshold = area / (50 * (log(area)+1))
         self.history: list[Generation] = []
         self.generations = 0
         self.rule = rule
@@ -32,7 +33,12 @@ class Game:
             return True
         generational_average = 0
         for generation in self.history:
-            generational_average += self.current_gen ^ generation
+            if differences := self.current_gen ^ generation:
+                generational_average += differences
+            else:
+                # If generations are identical the only life left is
+                # still life or ocillators with period <= GENERATIONSTOKEEP
+                return False
         generational_average /= len(self.history)
         return generational_average > self.end_threshold
 

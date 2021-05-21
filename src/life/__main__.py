@@ -6,23 +6,29 @@ from life.generation import Generation
 from life.game import Game
 from life.rule import DEFAULT_RULE, Rule
 
+
+DEFAULT_DELAY = 0.01
+
+
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument('width', nargs='?', default=40, type=int)
     parser.add_argument('height', nargs='?', default=20, type=int)
     parser.add_argument('-r', '--rules', default=DEFAULT_RULE, type=Rule)
+    parser.add_argument('-d', '--delay', default=DEFAULT_DELAY, type=float)
     return parser.parse_args()
 
-def core_loop(game: Game):
+def core_loop(game: Game, delay: float = DEFAULT_DELAY):
     """Perform the game by iterating steps until activity ceases.
     At each generation we clear the screen and display the current generation.
-    We sleep for 0.1 seconds between each generations.
     """
     try:
         for generation in game:
+            # Since it takes a moment to render, we do that before clearing to avoid flickering
+            display = str(generation)
             system('clear')
-            print(generation)
-            sleep(0.1)
+            print(display)
+            sleep(delay)
     except KeyboardInterrupt:
         pass
     print(f'game ended at generation {game.generations}')
@@ -33,7 +39,7 @@ def main():
     """
     config = parse_args()
     game = Game(Generation.random(config.height, config.width), config.rules)
-    core_loop(game)
+    core_loop(game, delay=config.delay)
 
 
 if __name__ == '__main__':
