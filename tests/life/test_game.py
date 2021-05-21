@@ -26,7 +26,7 @@ class TestGame:
         grid = Game(self.tiny_true, rule)
         grid.history = history[:]
         actual = grid.has_activity()
-        assert actual == expected
+        assert actual is expected
 
     @pytest.mark.parametrize('prehistory, generation, expected', (
         (

@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument('-d', '--delay', default=DEFAULT_DELAY, type=float)
     return parser.parse_args()
 
-def core_loop(game: Game, delay: int = DEFAULT_DELAY):
+def core_loop(game: Game, delay: float = DEFAULT_DELAY):
     """Perform the game by iterating steps until activity ceases.
     At each generation we clear the screen and display the current generation.
     """

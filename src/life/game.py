@@ -15,7 +15,7 @@ class Game:
         self.height = len(gen._grid)
         self.width = len(gen._grid[0])
         area = self.height*self.width
-        self.end_threshold = area/(50*log(area))
+        self.end_threshold = area / (50 * (log(area)+1))
         self.history: list[Generation] = []
         self.generations = 0
         self.rule = rule
