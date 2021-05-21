@@ -60,25 +60,19 @@ class TestGeneration:
         ),
         (
             [
-                [False, False, False],
-                [True , True , True ],
-                [False, False, False],
+                [True, True, True, True],
+                [True, True, True, True],
+                [True, True, True, True],
+                [True, True, True, True],
             ],
-            0, -1,
-            1,
+            1, 1,
+            8,
         ),
         (
             [
                 [False],
             ],
             0, 0,
-            0,
-        ),
-        (
-            [
-                [False],
-            ],
-            1, 1,
             0,
         ),
     ))
