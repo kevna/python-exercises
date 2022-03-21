@@ -13,7 +13,6 @@ class TestSorter:
         ([6, 2, 4, 1, 3], [1, 2, 3, 4, 6]),
         ([-5, -1, -3, -10], [-10, -5, -3, -1]),
         (['twelve', 'three', 'one'], ['one', 'three', 'twelve']),
-        (list(range(41, 0, -1)), list(range(1, 42))),
     )
 
     def _sort_helper(self, sorter_class, items, expected):
@@ -45,6 +44,9 @@ class TestSorter:
     def test_quick_sort(self, items, expected):
         self._sort_helper(QuickSort, items, expected)
 
-    @pytest.mark.parametrize('items, expected', TESTLIST)
+    @pytest.mark.parametrize('items, expected', TESTLIST+(
+        (list(range(41, 0, -1)), list(range(1, 42))),
+        (list(range(91, 0, -1)), list(range(1, 92))),
+    ))
     def test_timsort(self, items, expected):
         self._sort_helper(TimSort, items, expected)
