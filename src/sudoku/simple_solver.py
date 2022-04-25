@@ -38,8 +38,8 @@ class SimpleSudokuSolver(SudokuSolver):
         This simply removes known values as possibilities from their row, col and box.
         """
         cells_changed = 0
-        for row in range(len(self.grid)):
-            for col in range(len(self.grid[row])):
+        for row, _ in enumerate(self.grid):
+            for col, _ in enumerate(self.grid[row]):
                 if number := self.grid[row][col].value:
                     cells_changed += self.row_remove_possibility(row, number)
                     cells_changed += self.col_remove_possibility(col, number)
