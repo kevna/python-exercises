@@ -13,7 +13,7 @@ class TimSort(Sorter):  # pylint: disable=too-few-public-methods
             length //= 2
         return length + remainder
 
-    def _insertion_sort(self, items: SortList, left: int, right: int) -> SortList:
+    def _insertion_sort(self, items: SortList, left: int, right: int) -> SortList:  # pylint: disable=no-self-use
         minj = left-1
         for i in range(left, right):
             temp = items[i]
@@ -24,7 +24,7 @@ class TimSort(Sorter):  # pylint: disable=too-few-public-methods
             items[j+1] = temp
         return items
 
-    def _merge(self, items: SortList, left: int, mid: int, right: int) -> SortList:
+    def _merge(self, items: SortList, left: int, mid: int, right: int) -> SortList:  # pylint: disable=no-self-use
         if right <= mid:
             return items
 
