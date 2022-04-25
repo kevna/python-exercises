@@ -18,7 +18,7 @@ class MergeSort(Sorter):  # pylint: disable=too-few-public-methods
         right_list = self._merge_sort(items[split:])
         return self._merge_lists(left_list, right_list)
 
-    def _merge_lists(self, left_list: SortList, right_list: SortList) -> SortList:
+    def _merge_lists(self, left_list: SortList, right_list: SortList) -> SortList:  # pylint: disable=no-self-use
         left_offset, right_offset = (0, 0)
         left_len = len(left_list)
         right_len = len(right_list)

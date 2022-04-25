@@ -40,7 +40,7 @@ class SudokuGrid:
     def load_file(cls, filename: str) -> 'SudokuGrid':
         """Factory to load a grid from a file."""
         new_grid = []
-        with open(filename) as file:
+        with open(filename, encoding='utf-8') as file:
             for _ in range(cls.GRID_HEIGHT):
                 new_row = []
                 line = file.readline()
@@ -61,29 +61,29 @@ class SudokuGrid:
         box_col = (cell_col // self.BOX_WIDTH) * self.BOX_WIDTH
         return box_row, box_col
 
-    def row_complete(self, r: int) -> bool:
+    def row_complete(self, row: int) -> bool:
         """Check if an entire row has been completed."""
-        if r in self._complete_rows:
+        if row in self._complete_rows:
             return True
         result = False
-        for cell in self._grid[r]:
+        for cell in self._grid[row]:
             if not cell:
                 break
         else:
-            self._complete_rows.append(r)
+            self._complete_rows.append(row)
             result = True
         return result
 
-    def col_complete(self, c: int) -> bool:
+    def col_complete(self, col: int) -> bool:
         """Check if an entire col has been completed."""
-        if c in self._complete_cols:
+        if col in self._complete_cols:
             return True
         result = False
         for row in self._grid:
-            if not row[c]:
+            if not row[col]:
                 break
         else:
-            self._complete_cols.append(c)
+            self._complete_cols.append(col)
             result = True
         return result
 
@@ -99,12 +99,12 @@ class SudokuGrid:
         self._complete_boxes.append((box_row, box_col))
         return True
 
-    def cell_complete(self, r: int, c: int) -> bool:
+    def cell_complete(self, row: int, col: int) -> bool:
         """Check if a cell is in a completed row/box/cell."""
         return (
-            self.row_complete(r)
-            or self.col_complete(c)
-            or self.box_complete(r, c)
+            self.row_complete(row)
+            or self.col_complete(col)
+            or self.box_complete(row, col)
         )
 
     def is_complete(self) -> bool:
@@ -142,29 +142,30 @@ class SudokuGrid:
         result = []
         found_count = 0
         possibility_count = 0
-        width = r = 0
-        for r, row in enumerate(self._grid):
+        width = row_index = 0
+        for row_index, row in enumerate(self._grid):
             width = len(row)
-            if r % self.BOX_HEIGHT == 0:
-                result.append(self.row_separator(width, r))
+            if row_index % self.BOX_HEIGHT == 0:
+                result.append(self.row_separator(width, row_index))
             row_text = [self.LINEVERT]
-            for c, cell in enumerate(row):
+            for col_index, cell in enumerate(row):
                 if cell:
                     found_count += 1
                 else:
                     possibility_count += len(cell)
                 space = ' '
                 cell_text = f'{cell}'
-                if hl_whitespace := (self.row_complete(r) or self.box_complete(r, c)):
+                if hl_whitespace := (self.row_complete(row_index) \
+                        or self.box_complete(row_index, col_index)):
                     space = self.COMPLETED_COLOUR(space)
-                if hl_whitespace or self.col_complete(c):
+                if hl_whitespace or self.col_complete(col_index):
                     cell_text = self.COMPLETED_COLOUR(cell_text)
                 row_text += [space, cell_text]
-                if (c+1) % self.BOX_WIDTH == 0:
+                if (col_index+1) % self.BOX_WIDTH == 0:
                     row_text += [space, self.LINEVERT]
             result.append(''.join(row_text))
         result += [
-            self.row_separator(width, r),
+            self.row_separator(width, row_index),
             f'Total Found: {found_count}',
             f'Remaining Possibilities: {possibility_count}',
         ]
