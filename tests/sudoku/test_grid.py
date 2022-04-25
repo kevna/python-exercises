@@ -37,7 +37,7 @@ class TestSudokuGrid:
         mock_file = mock_open.return_value.__enter__.return_value
         mock_file.readline.side_effect = file
         actual = SudokuGrid.load_file(filename)
-        assert mock_open.call_args == call(filename)
+        assert mock_open.call_args == call(filename, encoding='utf-8')
         # TODO assert actual == expected
 
     @pytest.mark.parametrize('coords, expected', (

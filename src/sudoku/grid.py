@@ -40,7 +40,7 @@ class SudokuGrid:
     def load_file(cls, filename: str) -> 'SudokuGrid':
         """Factory to load a grid from a file."""
         new_grid = []
-        with open(filename) as file:
+        with open(filename, encoding='utf-8') as file:
             for _ in range(cls.GRID_HEIGHT):
                 new_row = []
                 line = file.readline()
