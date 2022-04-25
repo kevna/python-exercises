@@ -11,6 +11,10 @@ DEFAULT_DELAY = 0.01
 
 
 def parse_args():
+    """Parse command line arguments with argparse.
+    making thise self-contained and separate from functional logic
+    means we can safely ignore this from testing.
+    """
     parser = ArgumentParser()
     parser.add_argument('width', nargs='?', default=40, type=int)
     parser.add_argument('height', nargs='?', default=20, type=int)

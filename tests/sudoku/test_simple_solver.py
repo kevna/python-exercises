@@ -4,11 +4,6 @@ from sudoku.grid import SudokuGrid
 from sudoku.simple_solver import SimpleSudokuSolver
 
 
-@pytest.fixture
-def solver(grid):
-    return SimpleSudokuSolver(grid)
-
-
 class TestSimpleSudokuSolver:
     @pytest.mark.parametrize('original, expected', (
         (

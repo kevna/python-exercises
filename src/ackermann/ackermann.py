@@ -32,7 +32,7 @@ class AckermannCache:
 
     def load_cache(self, filename: str):
         """Load a cache record from a persistant file."""
-        with open(filename) as file:
+        with open(filename, encoding='utf-8') as file:
             for line in file:
                 m, n, value = line.strip().split(',')
                 self.add_cache((int(m), int(n)), int(value))
@@ -42,7 +42,7 @@ class AckermannCache:
         """Save a cache record to a persistant file."""
         if self.size <= self.read_size:
             return
-        with open(filename, 'w') as file:
+        with open(filename, 'w', encoding='utf-8') as file:
             for (m, n), value in self.cache.items():
                 print(f'{m},{n},{value}', file=file)
 
