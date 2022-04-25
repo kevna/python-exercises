@@ -6,6 +6,7 @@ from sorting.bubble_sort import OpBubbleSort
 from sorting.cocktail_shaker import CocktailShakerSort
 from sorting.merge_sort import MergeSort
 from sorting.quick_sort import QuickSort
+from sorting.timsort import TimSort
 
 class TestSorter:
     TESTLIST = (
@@ -42,3 +43,10 @@ class TestSorter:
     @pytest.mark.parametrize('items, expected', TESTLIST)
     def test_quick_sort(self, items, expected):
         self._sort_helper(QuickSort, items, expected)
+
+    @pytest.mark.parametrize('items, expected', TESTLIST+(
+        (list(range(41, 0, -1)), list(range(1, 42))),
+        (list(range(91, 0, -1)), list(range(1, 92))),
+    ))
+    def test_timsort(self, items, expected):
+        self._sort_helper(TimSort, items, expected)
