@@ -1,16 +1,19 @@
 from sorting.sorter import Sorter, SortList
 
 class TimSort(Sorter):  # pylint: disable=too-few-public-methods
+    """Implementation of timsort, one of the most popular hybrid sorts
+    Divide the list into sgements, sort each segment and merge them in order.
+    """
     MINIMUM = 32
 
-    def minrun(self, length: int) -> int:
+    def _minrun(self, length: int) -> int:
         remainder = 0
         while length >= self.MINIMUM:
             remainder |= length % 2
             length //= 2
         return length + remainder
 
-    def insertion_sort(self, items: SortList, left: int, right: int) -> SortList:
+    def _insertion_sort(self, items: SortList, left: int, right: int) -> SortList:
         minj = left-1
         for i in range(left, right):
             temp = items[i]
@@ -21,7 +24,7 @@ class TimSort(Sorter):  # pylint: disable=too-few-public-methods
             items[j+1] = temp
         return items
 
-    def merge(self, items: SortList, left: int, mid: int, right: int) -> SortList:
+    def _merge(self, items: SortList, left: int, mid: int, right: int) -> SortList:
         if right <= mid:
             return items
 
@@ -51,11 +54,11 @@ class TimSort(Sorter):  # pylint: disable=too-few-public-methods
 
     def sort(self, items: SortList, cutoff: int = None) -> SortList:
         length = len(items)
-        minrun = self.minrun(length)
+        minrun = self._minrun(length)
 
         for start in range(1, length, minrun):
             end = min(start+minrun, length)
-            self.insertion_sort(items, start, end)
+            self._insertion_sort(items, start, end)
 
         size = minrun
         while size < length:
@@ -63,7 +66,7 @@ class TimSort(Sorter):  # pylint: disable=too-few-public-methods
             for left in range(0, length, double):
                 mid = min(length, left+size)
                 right = min(length, left+double)
-                self.merge(items, left, mid, right)
+                self._merge(items, left, mid, right)
             size = double
 
         return items
