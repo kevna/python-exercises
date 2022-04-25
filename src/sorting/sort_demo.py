@@ -1,4 +1,4 @@
-def readData(filename):
+def read_data(filename):
     result = []
     with open(filename) as file:
         for line in file:
