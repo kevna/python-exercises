@@ -5,6 +5,36 @@ import sys, random, os, time, curses
 sys.path.append("../lib/")
 import Script
 import CursesMixin
+import threading
+
+class CellCalc(threading.Thread):
+    def __init__(self, rules, oldGrid, newGrid, x, y, **kw):
+        super(CellCalc, self).__init__(**kw)
+        self.daemon = True
+        self.rules = rules
+        self.oldGrid = oldGrid
+        self.newGrid = newGrid
+        self.x = x
+        self.y = y
+
+    def run(self):
+        self.newGrid[self.y][self.x] = self.cellLives(self.y, self.x)
+
+    def cellLives(self, row, col):
+        liveNeigbours = 0
+        height = len(self.oldGrid)
+        for i in range(-1, 2):
+            rowPos = row + i
+            if rowPos >= 0 and rowPos < height:
+                width = len(self.oldGrid[rowPos])
+                for j in range(-1, 2):
+                    colPos = col + j
+                    if colPos >= 0 and colPos < width and self.oldGrid[rowPos][colPos]:
+                            liveNeigbours += 1
+
+        liveCell = (liveNeigbours-1) in self.rules[self.oldGrid[row][col]]
+        return liveCell
+
 
 class GameOfLife(Script.Script, CursesMixin.CursesMixin):
     GENERATIONSTOKEEP = 10
@@ -104,31 +134,44 @@ class GameOfLife(Script.Script, CursesMixin.CursesMixin):
         if len(self.storedGenerations) > self.GENERATIONSTOKEEP:
             del self.storedGenerations[0]
 
-    def cellLives(self, row, col):
-        liveNeigbours = 0
-        height = len(self.grid)
-        for i in range(-1, 2):
-            rowPos = row + i
-            if rowPos >= 0 and rowPos < height:
-                width = len(self.grid[rowPos])
-                for j in range(-1, 2):
-                    colPos = col + j
-                    if colPos >= 0 and colPos < width and self.grid[rowPos][colPos]:
-                            liveNeigbours += 1
+    # def cellLives(self, row, col):
+    #     liveNeigbours = 0
+    #     height = len(self.grid)
+    #     for i in range(-1, 2):
+    #         rowPos = row + i
+    #         if rowPos >= 0 and rowPos < height:
+    #             width = len(self.grid[rowPos])
+    #             for j in range(-1, 2):
+    #                 colPos = col + j
+    #                 if colPos >= 0 and colPos < width and self.grid[rowPos][colPos]:
+    #                         liveNeigbours += 1
 
-        liveCell = (liveNeigbours-1) in self.rules[self.grid[row][col]]
-        return liveCell
+    #     liveCell = (liveNeigbours-1) in self.rules[self.grid[row][col]]
+    #     return liveCell
+
+    # def step(self):
+    #     self.storeGeneration()
+    #     newGrid = []
+    #     for row in range(len(self.grid)):
+    #         newRow = []
+    #         for col in range(len(self.grid[row])):
+    #             newRow.append(self.cellLives(row, col))
+    #         newGrid.append(tuple(newRow))
+    #     self.grid = tuple(newGrid)
 
     def step(self):
-        self.storeGeneration()
-        newGrid = []
-        for row in range(len(self.grid)):
-            newRow = []
-            for col in range(len(self.grid[row])):
-                newRow.append(self.cellLives(row, col))
-            newGrid.append(tuple(newRow))
-        self.grid = tuple(newGrid)
-    
+        height = len(self.grid)
+        width = len(self.grid[1])
+        newGrid = [[ False for col in range(width)] for row in range(height)]
+        # newGrid = []
+        for row in range(height):
+            # width = len(self.grid[row])
+            # newGrid.append([ False for col in range(width)])
+            for col in range(width):
+                t = CellCalc(self.rules, self.grid, newGrid, col, row)
+                t.start()
+        self.grid = newGrid
+
     def __str__(self):
         allRows = []
         for row in range(len(self.grid)):
