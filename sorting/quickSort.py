@@ -1,26 +1,41 @@
 import sorter
+import itertools
 
 class QuickSort(sorter.Sorter):
     def sort(self, items, cutoff = None):
-        items = self._quickSort(items)
+        return self._quickSort(items)
 
     def _quickSort(self, items):
-        if len(items) < 2:
+        size = len(items)
+        if size < 2:
             return items
-        split = len(items) / 2
-        pivot = items[split]
-        items.remove(pivot)
+        pivot = items.pop(size / 2)
 
         lowList = []
         highList = []
 
-        for i in range(len(items)):
-            if items[i] <= pivot:
-                lowList.append(items[i])
+        for item in items:
+            if item <= pivot:
+                lowList.append(item)
             else:
-                highList.append(items[i])
-        if len(lowList) > 1:
-            lowList = self._quickSort(lowList)
-        if len(highList) > 1:
-            highList = self._quickSort(highList)
-        return lowList + [pivot] + highList
+                highList.append(item)
+        return self._quickSort(lowList) + [pivot] + self._quickSort(highList)
+
+class QuickIterSort(QuickSort):
+    def _quickSort(self, items):
+        size = len(items)
+        if size < 2:
+            for item in items:
+                yield item
+        else:
+            pivot = items.pop(size / 2)
+
+            low = []
+            high = []
+            for item in items:
+                if item > pivot:
+                    high.append(item)
+                else:
+                    low.append(item)
+            for item in itertools.chain(self._quickSort(low), iter([pivot]), self._quickSort(high)):
+                yield item
