@@ -1,0 +1,29 @@
+*target*
+*.jar
+*.war
+*.ear
+*.class
+*.zip
+
+# eclipse specific ignores
+*.pydevproject
+*.project
+*.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings
+.loadpath
+
+#external builders
+.externalToolBuilders
+
+# local eclipse launch config
+*.launch
+
